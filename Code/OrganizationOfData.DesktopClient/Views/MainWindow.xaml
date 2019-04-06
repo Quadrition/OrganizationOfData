@@ -30,12 +30,13 @@
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
 
-        <Menu IsMainMenu="True" Grid.Row="0" Margin="5">
+        <Menu IsMainMenu="True" Margin="5">
             <MenuItem Header="_Datoteka" Icon="{materialDesign:PackIcon Kind=File}">
-                <MenuItem Header="_Nova" Icon="{materialDesign:PackIcon Kind=FilePlus}"/>
+                <MenuItem Header="_Nova" Icon="{materialDesign:PackIcon Kind=FilePlus}" Command="{Binding OpenNewFileWindowCommand}" />
                 <MenuItem Header="_Učitaj" Icon="{materialDesign:PackIcon Kind=FileDownload}"/>
                 <MenuItem Header="_Sačuvaj" Icon="{materialDesign:PackIcon Kind=ContentSave}"/>
-                <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}"/>
+                <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}">
+                </MenuItem>
                 <MenuItem Header="_Izađi" Icon="{materialDesign:PackIcon Kind=ExitToApp}"/>
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
@@ -107,7 +108,7 @@
                     </ScrollViewer>
                 </materialDesign:Card>
 
-                <GroupBox Header="Memorija" Style="{DynamicResource MaterialDesignGroupBox}" Margin="10" Grid.Row="1" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="0">
+                <GroupBox Header="Memorija" Style="{DynamicResource MaterialDesignGroupBox}" Margin="10" Grid.Row="1" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden">
                         <local:BucketControl DataContext="{Binding BucketControlViewModel}" Margin="0 0 0 10" />
                     </ScrollViewer>

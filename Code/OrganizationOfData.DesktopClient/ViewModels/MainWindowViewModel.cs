@@ -5,11 +5,16 @@
     using System.Windows.Input;
     using OrganizationOfData.Windows;
     using OrganizationOfData.Data;
+    using MvvmDialogs;
 
     public class MainWindowViewModel : ViewModel
     {
         private PrimaryZoneControlViewModel primaryZoneControlViewModel;
         private BucketControlViewModel bucketControlViewModel;
+
+        private IDialogService dialogService;
+
+        private BulkFile bulkFile;
 
         public PrimaryZoneControlViewModel PrimaryZoneControlViewModel
         {
@@ -37,8 +42,10 @@
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IDialogService dialogService)
         {
+            this.dialogService = dialogService;
+
             ICollection<BucketControlViewModel> bucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 
             ICollection<RecordControlViewModel> collection = new ObservableCollection<RecordControlViewModel>();
@@ -224,18 +231,35 @@
             };
         }
 
-        public ICommand Uzmi
+        public ICommand OpenNewFileWindowCommand
         {
             get
             {
-                return new ActionCommand(p => UzmiSve());
+                return new ActionCommand(p => OpenNewFileWindow());
             }
         }
 
-        private void UzmiSve()
+        private void OpenNewFileWindow()
         {
+            var viewModel = new NewFileWindowViewModel();
 
-            
+            bool? result = dialogService.ShowDialog(this, viewModel);
+
+            if (result.HasValue)
+            {
+                if (result.Value)
+                {
+                    this.bulkFile = viewModel.bulkFile;
+                }
+                else
+                {
+                    this.bulkFile = null;
+                }
+            }
+            else
+            {
+                this.bulkFile = null;
+            }
         }
     }
 }

@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="ViewModels\BucketControlViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NewFileWindowViewModel.cs" />
     <Compile Include="ViewModels\PrimaryZoneControlViewModel.cs" />
     <Compile Include="ViewModels\RecordControlViewModel.cs" />
     <Compile Include="Views\BucketControl.xaml.cs">

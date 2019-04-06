@@ -19,7 +19,7 @@
 
             var window = new MainWindow()
             {
-                DataContext = new MainWindowViewModel()
+                DataContext = new MainWindowViewModel(new DialogService())
             };
 
             window.ShowDialog();
