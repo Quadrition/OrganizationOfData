@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="OrganizationOfData.DesktopClient.Views.RecordControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrganizationOfData.DesktopClient.Views"
+             xmlns:windows="clr-namespace:OrganizationOfData.Windows;assembly=OrganizationOfData.Windows"
+             xmlns:viewModels="clr-namespace:OrganizationOfData.DesktopClient.ViewModels"
+            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+            xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+            md:DialogServiceViews.IsRegistered="True"
+            mc:Ignorable="d"
+            d:DataContext="{d:DesignInstance {x:Type viewModels:RecordControlViewModel}}"
+            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+            TextElement.FontWeight="Regular"
+            TextElement.FontSize="13"
+            TextOptions.TextFormattingMode="Ideal"
+            TextOptions.TextRenderingMode="Auto"
+            Background="Transparent"
+            FontFamily="{DynamicResource MaterialDesignFont}"
+            Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <windows:StatusConverter x:Key="statusConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
+        <materialDesign:Flipper.FrontContent>
+            <materialDesign:ColorZone Mode="Accent" Padding="5">
+                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="5 3 5 3"  Command="{x:Static materialDesign:Flipper.FlipCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Id:" FontWeight="Bold" VerticalAlignment="Center" />
+                        <Label Grid.Column="1" Content="{Binding Record.Person.Id}" VerticalAlignment="Center" />
+                        <Label Grid.Column="2" Content="Status:" VerticalAlignment="Center" FontWeight="Bold" />
+                        <Label Grid.Column="3" Content="{Binding Record.Status, Converter={StaticResource statusConverter}}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </materialDesign:ColorZone>
+        </materialDesign:Flipper.FrontContent>
+        <materialDesign:Flipper.BackContent>
+            <StackPanel>
+                <materialDesign:ColorZone Mode="Accent" Padding="6">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}">
+                            <materialDesign:PackIcon Kind="ArrowLeft" />
+                        </Button>
+                        <TextBlock Margin="8 0 0 0" VerticalAlignment="Center">
+                            Informacije
+                        </TextBlock>
+                    </StackPanel>
+                </materialDesign:ColorZone>
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" FontWeight="Bold" Content="JMBG:" />
+                    <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" FontWeight="Bold" Content="Ime i prezime:" />
+                    <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" FontWeight="Bold" Content="Adresa:" />
+                    <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" FontWeight="Bold" Content="Broj godina:" />
+                    <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" Content="Status sloga:" />
+                    <Label Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Content="{Binding Record.Person.Id}" />
+                    <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Content="{Binding Record.Person.FullName}" />
+                    <Label Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Content="{Binding Record.Person.Adress}" />
+                    <Label Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Content="{Binding Record.Person.Age}" />
+                    <Label Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" Content="{Binding Record.Status, Converter={StaticResource statusConverter}}" />
+
+                </Grid>
+            </StackPanel>
+            
+        </materialDesign:Flipper.BackContent>
+    </materialDesign:Flipper>
+</UserControl>
