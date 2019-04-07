@@ -17,7 +17,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="720" Width="1280" MinHeight="450" MinWidth="600">
+        Title="Simulacija serijske datoteke" Height="720" Width="1280" MinHeight="450" MinWidth="600" Icon="C:\Users\Mikec\Documents\GitHub\OrganizationOfData\Build\favicon.ico">
     <Window.Resources>
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
