@@ -11,6 +11,44 @@
         public BulkFile bulkFile;
 
         private bool? dialogResult;
+        private BulkFileType bulkFileType { get; set; }
+        
+        public BulkFile BulkFile
+        {
+            get
+            {
+                return bulkFile;
+            }
+            set
+            {
+                bulkFile = value;
+                NotifyPropertyChanged(nameof(BulkFile));
+            }
+        }
+
+        public BulkFileType BulkFileType
+        {
+            get
+            {
+                return bulkFileType;
+            }
+            set
+            {
+                bulkFileType = value;
+                NotifyPropertyChanged(nameof(BulkFileType));
+
+                switch(value)
+                {
+                    case BulkFileType.withSerialOverrunZone:
+                        BulkFile = new BulkFileWithSerialOverrunZone();
+                        break;
+                    case BulkFileType.ovoDrugo:
+                        throw new NotImplementedException();
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
 
         public bool? DialogResult
         {
@@ -25,28 +63,33 @@
             }
         }
 
-        public ICommand Zavrsi
+        public NewFileWindowViewModel()
+        {
+            BulkFile = new BulkFileWithSerialOverrunZone();
+        }
+
+        public ICommand CreateNewFileCommand
         {
             get
             {
-                return new ActionCommand(p => Zavrsio());
+                return new ActionCommand(p => CreateNewFile());
             }
         }
 
-        private void Zavrsio()
+        private void CreateNewFile()
         {
             DialogResult = true;
         }
 
-        public ICommand ZavrsiBez
+        public ICommand CancelCommand
         {
             get
             {
-                return new ActionCommand(p => ZavrsioBez());
+                return new ActionCommand(p => Cancel());
             }
         }
 
-        private void ZavrsioBez()
+        private void Cancel()
         {
             DialogResult = false;
         }

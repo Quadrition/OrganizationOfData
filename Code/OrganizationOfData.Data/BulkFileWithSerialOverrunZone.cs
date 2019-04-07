@@ -8,9 +8,9 @@
     {
         public Bucket[] OverrunZone;
 
-        public BulkFileWithSerialOverrunZone(int numberOfBuckets, int factor) : base(numberOfBuckets, factor)
+        public BulkFileWithSerialOverrunZone() : base()
         {
-            OverrunZone = new Bucket[numberOfBuckets];
+            OverrunZone = new Bucket[NumberOfBuckets];
         }
 
         public override void FormEmptyBulkFile()

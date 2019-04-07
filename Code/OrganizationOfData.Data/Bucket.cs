@@ -18,13 +18,5 @@
                 NotifyPropertyChanged(nameof(Records));
             }
         }
-
-        public int Factor
-        {
-            get
-            {
-                return Records.Length;
-            }
-        }
     }
 }

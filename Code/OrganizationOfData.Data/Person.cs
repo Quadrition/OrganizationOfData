@@ -1,6 +1,7 @@
 ﻿namespace OrganizationOfData.Data
 {
     using OrganizationOfData.Windows;
+    using System.ComponentModel.DataAnnotations;
 
     public class Person : Model
     {
@@ -9,6 +10,7 @@
         private string adress;
         private int age;
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Id osobe je obavezan")]
         public int Id
         {
             get

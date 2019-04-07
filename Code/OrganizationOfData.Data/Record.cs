@@ -1,6 +1,7 @@
 ﻿namespace OrganizationOfData.Data
 {
     using OrganizationOfData.Windows;
+    using System.ComponentModel.DataAnnotations;
 
     public class Record : Model
     {
@@ -20,6 +21,7 @@
             }
         }
 
+        [Required(ErrorMessage = "Status sloga je obavezan")]
         public Status Status
         {
             get
