@@ -10,21 +10,57 @@
 
         public BulkFileWithSerialOverrunZone() : base()
         {
-            OverrunZone = new Bucket[NumberOfBuckets];
+
         }
 
         public override void FormEmptyBulkFile()
         {
-            foreach(Bucket bucket in PrimaryZone)
+            PrimaryZone = new Bucket[NumberOfBuckets];
+            OverrunZone = new Bucket[NumberOfBuckets];
+
+            Record record;
+            Bucket bucket;
+
+            for (int i = 0; i < NumberOfBuckets; i++)
             {
-                foreach(Record record in bucket.Records)
+                bucket = new Bucket(Factor);
+                for (int j = 0; j < Factor; j++)
                 {
-                    record.Person.Id = 0;
-                    record.Person.FullName = null;
-                    record.Person.Adress = null;
-                    record.Person.Age = 0;
-                    record.Status = Status.empty;
+                    record = new Record()
+                    {
+                        Person = new Person()
+                        {
+                            Id = 0,
+                            FullName = null,
+                            Adress = null,
+                            Age = 0
+                        },
+                        Status = Status.empty
+                    };
+                    bucket.Records[j] = record;
                 }
+                PrimaryZone[i] = bucket;
+            }
+
+            for (int i = 0; i < NumberOfBuckets; i++)
+            {
+                bucket = new Bucket(Factor);
+                for (int j = 0; j < Factor; j++)
+                {
+                    record = new Record()
+                    {
+                        Person = new Person()
+                        {
+                            Id = 0,
+                            FullName = null,
+                            Adress = null,
+                            Age = 0
+                        },
+                        Status = Status.empty
+                    };
+                    bucket.Records[j] = record;
+                }
+                OverrunZone[i] = bucket;
             }
         }
     }

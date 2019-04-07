@@ -5,7 +5,7 @@
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
 
-    public class PrimaryZoneControlViewModel : ViewModel
+    public class OverrunZoneControlViewModel : ViewModel
     {
         private ICollection<BucketControlViewModel> bucketControlViewModels;
 
@@ -22,7 +22,7 @@
             }
         }
 
-        public PrimaryZoneControlViewModel()
+        public OverrunZoneControlViewModel()
         {
 
         }
@@ -31,14 +31,14 @@
         {
             BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 
-            foreach(Bucket bucket in buckets)
+            foreach (Bucket bucket in buckets)
             {
                 BucketControlViewModel bucketControlViewModel = new BucketControlViewModel()
                 {
                     RecordControlViewModels = new ObservableCollection<RecordControlViewModel>()
                 };
-                
-                foreach(Record record in bucket.Records)
+
+                foreach (Record record in bucket.Records)
                 {
                     bucketControlViewModel.RecordControlViewModels.Add(new RecordControlViewModel()
                     {

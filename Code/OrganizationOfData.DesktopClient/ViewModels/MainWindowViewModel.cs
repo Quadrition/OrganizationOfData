@@ -1,20 +1,47 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Windows.Input;
     using OrganizationOfData.Windows;
     using OrganizationOfData.Data;
     using MvvmDialogs;
+    using System.Windows;
+    using System;
+    using System.Collections.Generic;
 
     public class MainWindowViewModel : ViewModel
     {
         private PrimaryZoneControlViewModel primaryZoneControlViewModel;
         private BucketControlViewModel bucketControlViewModel;
+        private Visibility overrunZoneVisibility;
+        private OverrunZoneControlViewModel overrunZoneControlViewModel;
 
         private IDialogService dialogService;
 
         private BulkFile bulkFile;
+
+        public BulkFile BulkFile
+        {
+            get
+            {
+                return bulkFile;
+            }
+            set
+            {
+                bulkFile = value;
+                NotifyPropertyChanged(nameof(BulkFile));
+
+                PrimaryZoneControlViewModel.SetBuckets(BulkFile.PrimaryZone);
+                switch(value)
+                {
+                    case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
+                        OverrunZoneVisibility = Visibility.Visible;
+                        OverrunZoneControlViewModel.SetBuckets(bulkFileWithSerialOverrunZone.OverrunZone);
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+        }
 
         public PrimaryZoneControlViewModel PrimaryZoneControlViewModel
         {
@@ -41,194 +68,41 @@
                 NotifyPropertyChanged();
             }
         }
+        
+        public Visibility OverrunZoneVisibility
+        {
+            get
+            {
+                return overrunZoneVisibility;
+            }
+            set
+            {
+                overrunZoneVisibility = value;
+                NotifyPropertyChanged(nameof(OverrunZoneVisibility));
+            }
+        }
+
+        public OverrunZoneControlViewModel OverrunZoneControlViewModel
+        {
+            get
+            {
+                return overrunZoneControlViewModel;
+            }
+            set
+            {
+                overrunZoneControlViewModel = value;
+                NotifyPropertyChanged(nameof(OverrunZoneControlViewModel));
+            }
+        }
 
         public MainWindowViewModel(IDialogService dialogService)
         {
             this.dialogService = dialogService;
 
-            ICollection<BucketControlViewModel> bucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
-
-            ICollection<RecordControlViewModel> collection = new ObservableCollection<RecordControlViewModel>();
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            bucketControlViewModels.Add(new BucketControlViewModel
-            {
-                RecordControlViewModels = collection
-            });
-
-            collection = new ObservableCollection<RecordControlViewModel>();
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            collection.Add(new RecordControlViewModel
-            {
-                Record = new Record
-                {
-                    Person = new Person()
-                    {
-                        Id = 2,
-                        FullName = "Marko Mackic",
-                        Adress = "Milosa Crjn",
-                        Age = 32
-                    },
-                    Status = Status.active
-                }
-
-            }
-            );
-            bucketControlViewModels.Add(new BucketControlViewModel
-            {
-                RecordControlViewModels = collection
-            });
-
-            PrimaryZoneControlViewModel = new PrimaryZoneControlViewModel()
-            {
-                BucketControlViewModels = bucketControlViewModels
-            };
-            BucketControlViewModel = new BucketControlViewModel
-            {
-                RecordControlViewModels = collection
-            };
+            PrimaryZoneControlViewModel = new PrimaryZoneControlViewModel();
+            OverrunZoneControlViewModel = new OverrunZoneControlViewModel();
+            BucketControlViewModel = new BucketControlViewModel();
+            OverrunZoneVisibility = Visibility.Collapsed;
         }
 
         public ICommand OpenNewFileWindowCommand
@@ -245,20 +119,9 @@
 
             bool? result = dialogService.ShowDialog(this, viewModel);
 
-            if (result.HasValue)
+            if (result.HasValue && result.Value)
             {
-                if (result.Value)
-                {
-                    this.bulkFile = viewModel.bulkFile;
-                }
-                else
-                {
-                    this.bulkFile = null;
-                }
-            }
-            else
-            {
-                this.bulkFile = null;
+                BulkFile = viewModel.BulkFile;
             }
         }
     }

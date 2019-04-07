@@ -21,9 +21,15 @@
     <Window.Resources>
         <ResourceDictionary>
             <windows:BulkFileTypeConverter x:Key="bulkFileTypeConverter" />
+            <windows:TransformationMethodConverter x:Key="transformationMethodConverter" />
             <ObjectDataProvider x:Key="bulkFileTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="windows:BulkFileType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="transformationMethods" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="windows:TransformationMethod"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
         </ResourceDictionary>
@@ -59,7 +65,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <TextBox Grid.Row="2" Width="150" materialDesign:HintAssist.Hint="Broj baketa" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
+        <TextBox Name="numberOfBucketsTextBox" Grid.Row="2" Width="150" materialDesign:HintAssist.Hint="Broj baketa" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
             <TextBox.Text>
                 <Binding Path="BulkFile.NumberOfBuckets" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                     <Binding.ValidationRules>
@@ -68,9 +74,9 @@
                 </Binding>
             </TextBox.Text>
         </TextBox>
-        <TextBox Grid.Row="3" Width="150" materialDesign:HintAssist.Hint="Faktor baketiranja" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
+        <TextBox Name="factorTextBox" Grid.Row="3" Width="150" materialDesign:HintAssist.Hint="Faktor baketiranja" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
             <TextBox.Text>
-                <Binding Path="BulkFile.Factor" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged">
+                <Binding Path="BulkFile.Factor" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                     <Binding.ValidationRules>
                         <windows:IntegerValidation />
                     </Binding.ValidationRules>
@@ -78,21 +84,30 @@
             </TextBox.Text>
         </TextBox>
 
-        <GroupBox Header="Metoda transformacije" Margin="16" Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" HorizontalAlignment="Center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                
-                <RadioButton Grid.Row="0" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Content="Metoda ostataka pri deljenju" IsChecked="True" />
-                <RadioButton Grid.Row="1" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Content="Metoda centralnih cifara kljuca" />
-                <RadioButton Grid.Row="2" Style="{StaticResource MaterialDesignRadioButton}" VerticalAlignment="Center" Content="Metoda preklapanja" />
-            </Grid>
-        </GroupBox>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Source={StaticResource transformationMethods}}" Width="225" materialDesign:HintAssist.Hint="Metoda transformacije" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedItem="{Binding BulkFile.TransformationMethod}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource transformationMethodConverter}}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
-        <Button Grid.Row="4" Grid.Column="0" Width="100" Command="{Binding CreateNewFileCommand}" Content="Stvori" HorizontalAlignment="Center" />
-        <Button Grid.Row="4" Grid.Column="1" Width="100" Command="{Binding CancelCommand}" Content="Odustani" HorizontalAlignment="Center" />
+        <Button Grid.Row="4" Grid.Column="0" Width="100" Command="{Binding CreateNewFileCommand}" Content="Stvori" HorizontalAlignment="Center">
+            <Button.Style>
+                <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                    <Setter Property="IsEnabled" Value="False"/>
+                    <Style.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=numberOfBucketsTextBox}" Value="False"/>
+                                <Condition Binding="{Binding Path=(Validation.HasError), ElementName=factorTextBox}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsEnabled" Value="True"/>
+                        </MultiDataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button Grid.Row="4" Grid.Column="1" Width="100" Command="{Binding CancelCommand}" Content="Odustani" HorizontalAlignment="Center" Style="{StaticResource MaterialDesignRaisedButton}" />
     </Grid>
 </Window>

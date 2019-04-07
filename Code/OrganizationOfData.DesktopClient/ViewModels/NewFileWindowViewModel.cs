@@ -8,11 +8,10 @@
 
     public class NewFileWindowViewModel : ViewModel, IModalDialogViewModel
     {
-        public BulkFile bulkFile;
-
         private bool? dialogResult;
-        private BulkFileType bulkFileType { get; set; }
-        
+        private BulkFileType bulkFileType;
+        private BulkFile bulkFile;
+
         public BulkFile BulkFile
         {
             get
@@ -72,13 +71,22 @@
         {
             get
             {
-                return new ActionCommand(p => CreateNewFile());
+                return new ActionCommand(p => CreateNewFile(), p => IsNewFileValid);
             }
         }
 
         private void CreateNewFile()
         {
+            BulkFile.FormEmptyBulkFile();
             DialogResult = true;
+        }
+
+        public bool IsNewFileValid
+        {
+            get
+            {
+                return BulkFile != null && BulkFile.IsValid();
+            }
         }
 
         public ICommand CancelCommand

@@ -2,12 +2,14 @@
 {
     using OrganizationOfData.Windows;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     public abstract class BulkFile : Model
     {
         protected Bucket[] primaryZone;
         protected int factor;
         protected int numberOfBuckets;
+        protected TransformationMethod transformationMethod;
 
         [Range(1, int.MaxValue, ErrorMessage = "Faktor baketiranja mora biti pozitivan")]
         public int Factor
@@ -50,11 +52,40 @@
             }
         }
 
+        public TransformationMethod TransformationMethod
+        {
+            get
+            {
+                return transformationMethod;
+            }
+            set
+            {
+                transformationMethod = value;
+                NotifyPropertyChanged(nameof(TransformationMethod));
+            }
+        }
+
         public BulkFile()
         {
-            PrimaryZone = new Bucket[numberOfBuckets];
+
         }
 
         public abstract void FormEmptyBulkFile();
+
+        protected override string OnValidate(string propertyName)
+        {
+            return base.OnValidate(propertyName);
+        }
+
+        public virtual bool IsValid()
+        {
+            string[] ValidatedProperties =
+            {
+                "NumberOfBuckets",
+                "Factor"
+            };
+
+            return ValidatedProperties.FirstOrDefault(perp => OnValidate(perp) != null) == null;
+        }
     }
 }

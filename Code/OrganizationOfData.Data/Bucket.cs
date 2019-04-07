@@ -18,5 +18,10 @@
                 NotifyPropertyChanged(nameof(Records));
             }
         }
+
+        public Bucket(int factor)
+        {
+            Records = new Record[factor];
+        }
     }
 }
