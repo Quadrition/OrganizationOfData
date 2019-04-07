@@ -17,7 +17,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Simulacija serijske datoteke" Height="720" Width="1280" MinHeight="450" MinWidth="600" Icon="C:\Users\Mikec\Documents\GitHub\OrganizationOfData\Build\favicon.ico">
+        Title="Simulacija serijske datoteke" Height="720" Width="1280" MinHeight="450" MinWidth="600" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
@@ -54,7 +54,7 @@
             <TextBlock Padding="8" FontSize="20" Text=""/>
         </materialDesign:Card>
 
-        <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="C:\Users\Mikec\Documents\GitHub\OrganizationOfData\Build\ftn.png" Margin="5" />
+        <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="pack://application:,,,/Resources/ftn.png" Margin="5" />
 
         <materialDesign:ColorZone Mode="Accent" Padding="5" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth2">
             <StackPanel Orientation="Horizontal">
