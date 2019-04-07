@@ -15,9 +15,24 @@
         private Visibility overrunZoneVisibility;
         private OverrunZoneControlViewModel overrunZoneControlViewModel;
 
+        private string filePath;
+
         private IDialogService dialogService;
 
         private BulkFile bulkFile;
+
+        public string FilePath
+        {
+            get
+            {
+                return filePath;
+            }
+            set
+            {
+                filePath = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public BulkFile BulkFile
         {
@@ -40,6 +55,7 @@
                     default:
                         throw new NotImplementedException();
                 }
+                FilePath = null;
             }
         }
 
