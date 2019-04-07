@@ -124,5 +124,20 @@
                 BulkFile = viewModel.BulkFile;
             }
         }
+
+        public ICommand OpenAuthorsWindowsCommand
+        {
+            get
+            {
+                return new ActionCommand(p => OpenAuthorsWindow());
+            }
+        }
+
+        private void OpenAuthorsWindow()
+        {
+            var viewModel = new NewFileWindowViewModel();
+
+            bool? result = dialogService.ShowDialog(this, viewModel);
+        }
     }
 }

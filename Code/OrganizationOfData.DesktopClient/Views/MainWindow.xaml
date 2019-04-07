@@ -46,7 +46,7 @@
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
                 <MenuItem Header="_Dokumentacija" Icon="{materialDesign:PackIcon Kind=FileDocumentBoxMultiple}" />
-                <MenuItem Header="_Autori" Icon="{materialDesign:PackIcon Kind=ContactMail}" />
+                <MenuItem Header="_Autori" Icon="{materialDesign:PackIcon Kind=ContactMail}" Command="{Binding OpenAuthorsWindowsCommand}" />
             </MenuItem>
         </Menu>
 
