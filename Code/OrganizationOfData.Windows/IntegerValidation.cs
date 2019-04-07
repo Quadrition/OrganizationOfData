@@ -12,7 +12,7 @@
 
             if (string.IsNullOrWhiteSpace(stringValue))
             {
-                return new ValidationResult(true, null);
+                return new ValidationResult(false, "Broj je neispravan");
             }
 
             if (!int.TryParse(stringValue, out int result))

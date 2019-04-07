@@ -7,7 +7,7 @@
     public enum BulkFileType
     {
         withSerialOverrunZone = 0,
-        ovoDrugo = 1
+        withSerialOverrunPrimaryZone = 1
     }
 
     public class BulkFileTypeConverter : IValueConverter
@@ -19,9 +19,9 @@
             switch (status)
             {
                 case BulkFileType.withSerialOverrunZone:
-                    return "Sa serijskom zonom prekoračenja";
-                case BulkFileType.ovoDrugo:
-                    return "Ovo drugo";
+                    return "Zona prekoračenja";
+                case BulkFileType.withSerialOverrunPrimaryZone:
+                    return "Primarna zona";
                 default:
                     throw new NotImplementedException();
             }

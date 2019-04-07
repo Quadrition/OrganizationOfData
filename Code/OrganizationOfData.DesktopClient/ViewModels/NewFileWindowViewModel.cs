@@ -41,7 +41,7 @@
                     case BulkFileType.withSerialOverrunZone:
                         BulkFile = new BulkFileWithSerialOverrunZone();
                         break;
-                    case BulkFileType.ovoDrugo:
+                    case BulkFileType.withSerialOverrunPrimaryZone:
                         throw new NotImplementedException();
                     default:
                         throw new NotImplementedException();
