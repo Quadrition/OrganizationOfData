@@ -47,7 +47,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource SecondaryAccentBrush}" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
             <StackPanel Margin="10" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
                 <materialDesign:PackIcon Kind="FilePlus" Width="50" Height="50" Margin="0 0 20 0" />
@@ -94,7 +94,7 @@
 
         <Button Grid.Row="4" Grid.Column="0" Width="100" Command="{Binding CreateNewFileCommand}" Content="Potvrdi" HorizontalAlignment="Center">
             <Button.Style>
-                <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                     <Setter Property="IsEnabled" Value="False"/>
                     <Style.Triggers>
                         <MultiDataTrigger>
@@ -108,6 +108,6 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Button Grid.Row="4" Grid.Column="1" Width="100" Command="{Binding CancelCommand}" Content="Odustani" HorizontalAlignment="Center" Style="{StaticResource MaterialDesignRaisedButton}" />
+        <Button Grid.Row="4" Grid.Column="1" Width="100" Command="{Binding CancelCommand}" Content="Odustani" HorizontalAlignment="Center" Style="{StaticResource MaterialDesignRaisedAccentButton}" />
     </Grid>
 </Window>

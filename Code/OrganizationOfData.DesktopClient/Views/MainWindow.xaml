@@ -17,7 +17,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Simulacija serijske datoteke" Height="720" Width="1280" MinHeight="450" MinWidth="600" Icon="pack://application:,,,/Resources/favicon.ico">
+        Title="Simulacija serijske datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
@@ -30,7 +30,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
@@ -50,26 +50,27 @@
             </MenuItem>
         </Menu>
 
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Margin="10" Grid.Row="1" Padding="15" Grid.Column="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <GroupBox Header="Podaci o datoteci" Style="{DynamicResource MaterialDesignGroupBox}" materialDesign:ColorZoneAssist.Mode="Accent" Margin="10" Grid.Row="1" Grid.Column="0" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="192*" />
+                    <ColumnDefinition Width="491*"/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Row="0"  Content="Tip datoteke:" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
-                <Label Grid.Row="1"  Content="Faktor baketiranja:"  VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
-                <Label Grid.Row="2"  Content="Broj blokova:"  VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
-                <Label Grid.Row="0"  Grid.Column="1" Content="{Binding}"  VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
-                <Label Grid.Row="1"  Grid.Column="1" Content="{Binding BulkFile.Factor}"  VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
-                <Label Grid.Row="2"  Grid.Column="1" Content="{Binding BulkFile.NumberOfBuckets}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" />
+                <Label Grid.Row="0"  Content="Tip datoteke:" VerticalAlignment="Center"  />
+                <Label Grid.Row="1"  Content="Faktor baketiranja:"  VerticalAlignment="Center" />
+                <Label Grid.Row="2"  Content="Broj blokova:"  VerticalAlignment="Center" />
+                <Label Grid.Row="0"  Grid.Column="1" Content="{Binding}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+                <Label Grid.Row="1"  Grid.Column="1" Content="{Binding BulkFile.Factor}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+                <Label Grid.Row="2"  Grid.Column="1" Content="{Binding BulkFile.NumberOfBuckets}" VerticalAlignment="Center" Grid.ColumnSpan="2" />
             </Grid>
-        </materialDesign:Card>
+        </GroupBox>
 
         <Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Source="pack://application:,,,/Resources/ftn.png" Margin="5" />
 
