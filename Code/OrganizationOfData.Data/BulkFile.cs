@@ -1,9 +1,11 @@
 ﻿namespace OrganizationOfData.Data
 {
     using OrganizationOfData.Windows;
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
 
+    [Serializable]
     public abstract class BulkFile : Model
     {
         protected Bucket[] primaryZone;

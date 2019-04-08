@@ -1,7 +1,9 @@
 ﻿namespace OrganizationOfData.Data
 {
     using OrganizationOfData.Windows;
+    using System;
 
+    [Serializable]
     public class Bucket : Model
     {
         private Record[] records;

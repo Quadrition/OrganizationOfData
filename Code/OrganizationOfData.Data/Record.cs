@@ -1,8 +1,10 @@
 ﻿namespace OrganizationOfData.Data
 {
     using OrganizationOfData.Windows;
+    using System;
     using System.ComponentModel.DataAnnotations;
 
+    [Serializable]
     public class Record : Model
     {
         private Person person;

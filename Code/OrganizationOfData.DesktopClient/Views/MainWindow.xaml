@@ -38,10 +38,9 @@
         <Menu IsMainMenu="True" Margin="5">
             <MenuItem Header="_Datoteka" Icon="{materialDesign:PackIcon Kind=File}">
                 <MenuItem Header="_Nova" Icon="{materialDesign:PackIcon Kind=FilePlus}" Command="{Binding OpenNewFileWindowCommand}" />
-                <MenuItem Header="_Učitaj" Icon="{materialDesign:PackIcon Kind=FileDownload}"/>
-                <MenuItem Header="_Sačuvaj" Icon="{materialDesign:PackIcon Kind=ContentSave}"/>
-                <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}">
-                </MenuItem>
+                <MenuItem Header="_Učitaj" Icon="{materialDesign:PackIcon Kind=FileDownload}" Command="{Binding OpenFileCommand}"/>
+                <MenuItem Header="_Sačuvaj" Icon="{materialDesign:PackIcon Kind=ContentSave}" Command="{Binding FileSaveCommand}"/>
+                <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}" Command="{Binding FileSaveAsCommand}" />
                 <MenuItem Header="_Izađi" Icon="{materialDesign:PackIcon Kind=ExitToApp}"/>
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
@@ -161,6 +160,7 @@
                 </materialDesign:Card>
             </Grid>
         </ScrollViewer>
-
+        
+        <materialDesign:Snackbar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MessageQueue="{Binding Messages}" />
     </Grid>
 </Window>

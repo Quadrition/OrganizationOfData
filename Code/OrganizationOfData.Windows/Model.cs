@@ -9,6 +9,7 @@
     /// <summary>
     /// Base class for a Model in the MVVM pattern.
     /// </summary>
+    [Serializable]
     public abstract class Model : ObservableObject, IDataErrorInfo
     {
         /// <summary>

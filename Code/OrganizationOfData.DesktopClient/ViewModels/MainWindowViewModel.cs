@@ -6,7 +6,10 @@
     using MvvmDialogs;
     using System.Windows;
     using System;
-    using System.Collections.Generic;
+    using Microsoft.Win32;
+    using MvvmDialogs.FrameworkDialogs.OpenFile;
+    using MaterialDesignThemes.Wpf;
+    using MvvmDialogs.FrameworkDialogs.SaveFile;
 
     public class MainWindowViewModel : ViewModel
     {
@@ -55,7 +58,6 @@
                     default:
                         throw new NotImplementedException();
                 }
-                FilePath = null;
             }
         }
 
@@ -85,6 +87,8 @@
             }
         }
         
+        public SnackbarMessageQueue Messages { get; set; }
+
         public Visibility OverrunZoneVisibility
         {
             get
@@ -119,6 +123,7 @@
             OverrunZoneControlViewModel = new OverrunZoneControlViewModel();
             BucketControlViewModel = new BucketControlViewModel();
             OverrunZoneVisibility = Visibility.Collapsed;
+            Messages = new SnackbarMessageQueue();
         }
 
         public ICommand OpenNewFileWindowCommand
@@ -138,6 +143,8 @@
             if (result.HasValue && result.Value)
             {
                 BulkFile = viewModel.BulkFile;
+                Messages.Enqueue("Uspešno ste kreirali datoteku");
+                FilePath = null;
             }
         }
 
@@ -151,9 +158,79 @@
 
         private void OpenAuthorsWindow()
         {
-            var viewModel = new NewFileWindowViewModel();
+            var viewModel = new AuthorsWindowViewModel();
 
-            bool? result = dialogService.ShowDialog(this, viewModel);
+            dialogService.ShowDialog(this, viewModel);
+        }
+
+        public ICommand FileSaveAsCommand
+        {
+            get
+            {
+                return new ActionCommand(p => FileSaveAs(), p => BulkFile != null);
+            }
+        }
+
+        public void FileSaveAs()
+        {
+            var settings = new SaveFileDialogSettings()
+            {
+                Title = "Sačuvajte datoteku",
+                Filter = "Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                CheckFileExists = false
+            };
+            if (dialogService.ShowSaveFileDialog(this, settings) == true)
+            {
+                FilePath = settings.FileName;
+                BusinessContext.WriteToBinaryFile(FilePath, BulkFile as BulkFileWithSerialOverrunZone);
+                Messages.Enqueue("Uspešno ste sačuvali datoteku");
+            }
+        }
+
+        public ICommand FileSaveCommand
+        {
+            get
+            {
+                return new ActionCommand(p => FileSave(), p => BulkFile != null);
+            }
+        }
+
+        public void FileSave()
+        {
+            if (FilePath == null)
+            {
+                FileSaveAs();
+            }
+            else
+            {
+                BusinessContext.WriteToBinaryFile(FilePath, BulkFile as BulkFileWithSerialOverrunZone);
+                Messages.Enqueue("Uspešno ste sačuvali datoteku");
+            }
+        }
+
+        public ICommand OpenFileCommand
+        {
+            get
+            {
+                return new ActionCommand(p => OpenFile());
+            }
+        }
+
+        private void OpenFile()
+        {
+            var settings = new OpenFileDialogSettings()
+            {
+                Title = "Izaberite fajl",
+                Filter = "Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+            };
+            if (dialogService.ShowOpenFileDialog(this, settings) == true)
+            {
+                FilePath = settings.FileName;
+                BulkFile = BusinessContext.ReadFromBinaryFile(FilePath);
+                Messages.Enqueue("Uspešno ste učitali datoteku");
+            }
         }
     }
 }
