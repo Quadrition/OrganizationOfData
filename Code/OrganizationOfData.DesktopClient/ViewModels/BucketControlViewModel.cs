@@ -4,6 +4,9 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
+    /// <summary>
+    /// ViewModel containing all functionalities for BucketControl View
+    /// </summary>
     public class BucketControlViewModel : ViewModel
     {
         private ICollection<RecordControlViewModel> recordControlViewModels;
@@ -21,6 +24,9 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="BucketControlViewModel"/> class
+        /// </summary>
         public BucketControlViewModel()
         {
             RecordControlViewModels = new ObservableCollection<RecordControlViewModel>();

@@ -2,32 +2,22 @@
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using OrganizationOfData.Data;
-    using OrganizationOfData.Windows;
+    using OrganizationOfData.Data; 
 
-    public class PrimaryZoneControlViewModel : ViewModel
+    /// <summary>
+    /// ViewModel containing all functionalities for PrimaryZoneControl View
+    /// </summary>
+    public class PrimaryZoneControlViewModel : ZoneControlViewModel
     {
-        private ICollection<BucketControlViewModel> bucketControlViewModels;
-
-        public ICollection<BucketControlViewModel> BucketControlViewModels
-        {
-            get
-            {
-                return bucketControlViewModels;
-            }
-            set
-            {
-                bucketControlViewModels = value;
-                NotifyPropertyChanged(nameof(BucketControlViewModels));
-            }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of <see cref="PrimaryZoneControlViewModel"/>
+        /// </summary>
         public PrimaryZoneControlViewModel()
         {
 
         }
 
-        public void SetBuckets(ICollection<Bucket> buckets)
+        public override void SetBuckets(ICollection<Bucket> buckets)
         {
             BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 

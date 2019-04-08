@@ -3,6 +3,9 @@
     using OrganizationOfData.Windows;
     using System;
 
+    /// <summary>
+    /// Represents a list of Records inside of it
+    /// </summary>
     [Serializable]
     public class Bucket : Model
     {
@@ -21,6 +24,10 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="Bucket"/>
+        /// </summary>
+        /// <param name="factor">Number of records inside of it</param>
         public Bucket(int factor)
         {
             Records = new Record[factor];

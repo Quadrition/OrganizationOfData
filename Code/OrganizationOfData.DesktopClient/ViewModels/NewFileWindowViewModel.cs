@@ -1,16 +1,21 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
-    using MvvmDialogs;
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
     using System;
     using System.Windows.Input;
 
-    public class NewFileWindowViewModel : ViewModel, IModalDialogViewModel
+    /// <summary>
+    /// ViewModel containing all functionalities for NewFileWindow View
+    /// </summary>
+    public class NewFileWindowViewModel : ViewModel, IDialogRequestClose
     {
-        private bool? dialogResult;
-        private BulkFileType bulkFileType;
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+
+        #region BulkFileMembers
+
         private BulkFile bulkFile;
+        private BulkFileType bulkFileType;
 
         public BulkFile BulkFile
         {
@@ -36,7 +41,7 @@
                 bulkFileType = value;
                 NotifyPropertyChanged(nameof(BulkFileType));
 
-                switch(value)
+                switch (value)
                 {
                     case BulkFileType.withSerialOverrunZone:
                         BulkFile = new BulkFileWithSerialOverrunZone();
@@ -49,23 +54,14 @@
             }
         }
 
-        public bool? DialogResult
-        {
-            get
-            {
-                return dialogResult;
-            }
-            set
-            {
-                dialogResult = value;
-                NotifyPropertyChanged();
-            }
-        }
+        #endregion
 
         public NewFileWindowViewModel()
         {
             BulkFile = new BulkFileWithSerialOverrunZone();
         }
+
+        #region NewFileMembers
 
         public ICommand CreateNewFileCommand
         {
@@ -78,7 +74,7 @@
         private void CreateNewFile()
         {
             BulkFile.FormEmptyBulkFile();
-            DialogResult = true;
+            CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
         public bool IsNewFileValid
@@ -89,17 +85,18 @@
             }
         }
 
+        #endregion
+
+        #region CancelCommandMembers
+
         public ICommand CancelCommand
         {
             get
             {
-                return new ActionCommand(p => Cancel());
+                return new ActionCommand(p => CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(false)));
             }
         }
 
-        private void Cancel()
-        {
-            DialogResult = false;
-        }
+        #endregion  
     }
 }

@@ -1,12 +1,9 @@
 ﻿namespace OrganizationOfData.DesktopClient
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Windows;
-    using MvvmDialogs;
-    using OrganizationOfData.Data;
     using OrganizationOfData.DesktopClient.ViewModels;
     using OrganizationOfData.DesktopClient.Views;
+    using OrganizationOfData.Windows;
 
     /// <summary>
     /// Interaction logic for App.xaml
@@ -15,14 +12,20 @@
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
+            var view = new MainWindow();
+            MainWindow = view;
 
-            var window = new MainWindow()
-            {
-                DataContext = new MainWindowViewModel(new DialogService())
-            };
+            IDialogService dialogService = new DialogService(MainWindow);
 
-            window.ShowDialog();
+            dialogService.Register<NewFileWindowViewModel, NewFileWindow>();
+            dialogService.Register<AuthorsWindowViewModel, AuthorsWindow>();
+
+            IFileDialogService fileDialogService = new FileDialogService(MainWindow);
+
+            var viewModel = new MainWindowViewModel(dialogService, fileDialogService);
+            view.DataContext = viewModel;
+
+            view.ShowDialog();
         }
     }
 }

@@ -4,6 +4,9 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    /// <summary>
+    /// Represents an record with desired model within it and its status
+    /// </summary>
     [Serializable]
     public class Record : Model
     {
@@ -35,6 +38,14 @@
                 status = value;
                 NotifyPropertyChanged(nameof(Status));
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="Record"/> class
+        /// </summary>
+        public Record()
+        {
+
         }
     }
 }

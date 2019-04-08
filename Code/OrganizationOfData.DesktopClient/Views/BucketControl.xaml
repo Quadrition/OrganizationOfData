@@ -5,19 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OrganizationOfData.DesktopClient.Views"
              xmlns:viewModels="clr-namespace:OrganizationOfData.DesktopClient.ViewModels"
-            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
-            md:DialogServiceViews.IsRegistered="True"
-            mc:Ignorable="d"
-            d:DataContext="{d:DesignInstance {x:Type viewModels:BucketControlViewModel}}"
-            TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-            TextElement.FontWeight="Regular"
-            TextElement.FontSize="13"
-            TextOptions.TextFormattingMode="Ideal"
-            TextOptions.TextRenderingMode="Auto"
-            Background="Transparent"
-            FontFamily="{DynamicResource MaterialDesignFont}"
-            Height="Auto" Width="Auto">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:BucketControlViewModel}}"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="Transparent"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             Height="Auto" Width="Auto">
     <UserControl.Resources>
         <DataTemplate x:Key="RecordControl">
             <local:RecordControl />

@@ -10,6 +10,9 @@
         withSerialOverrunPrimaryZone = 1
     }
 
+    /// <summary>
+    /// A converter from enum <see cref="BulkFileType"/> to desired language
+    /// </summary>
     public class BulkFileTypeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

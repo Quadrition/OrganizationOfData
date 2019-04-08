@@ -11,6 +11,9 @@
         empty = 2
     }
 
+    /// <summary>
+    /// A converter from enum <see cref="Status"/> to desired language
+    /// </summary>
     public class StatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

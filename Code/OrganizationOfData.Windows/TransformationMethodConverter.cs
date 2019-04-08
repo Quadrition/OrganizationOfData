@@ -11,6 +11,9 @@
         overlap = 2
     }
 
+    /// <summary>
+    /// A converter from enum <see cref="TransformationMethod"/> to desired language
+    /// </summary>
     public class TransformationMethodConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

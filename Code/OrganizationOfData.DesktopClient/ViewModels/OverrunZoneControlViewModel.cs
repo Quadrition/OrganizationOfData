@@ -3,31 +3,25 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using OrganizationOfData.Data;
-    using OrganizationOfData.Windows;
 
-    public class OverrunZoneControlViewModel : ViewModel
+    /// <summary>
+    /// ViewModel containing all functionalities for OverrunZoneControl View
+    /// </summary>
+    public class OverrunZoneControlViewModel : ZoneControlViewModel
     {
-        private ICollection<BucketControlViewModel> bucketControlViewModels;
-
-        public ICollection<BucketControlViewModel> BucketControlViewModels
-        {
-            get
-            {
-                return bucketControlViewModels;
-            }
-            set
-            {
-                bucketControlViewModels = value;
-                NotifyPropertyChanged(nameof(BucketControlViewModels));
-            }
-        }
-
+        /// <summary>
+        /// Initializes a new instance of <see cref="OverrunZoneControlViewModel"/> class
+        /// </summary>
         public OverrunZoneControlViewModel()
         {
 
         }
 
-        public void SetBuckets(ICollection<Bucket> buckets)
+        /// <summary>
+        /// Overrides a base SetBuckets class from <see cref="ZoneControlViewModel"/> base class
+        /// </summary>
+        /// <param name="buckets">Buckets to be added</param>
+        public override void SetBuckets(ICollection<Bucket> buckets)
         {
             BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 

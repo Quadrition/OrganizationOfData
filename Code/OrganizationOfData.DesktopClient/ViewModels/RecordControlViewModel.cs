@@ -3,6 +3,9 @@
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
 
+    /// <summary>
+    /// ViewModel containing all functionalities for RecordControl View
+    /// </summary>
     public class RecordControlViewModel : ViewModel
     {
         private Record record;
@@ -20,6 +23,9 @@
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="RecordControlViewModel"/> class
+        /// </summary>
         public RecordControlViewModel()
         {
 

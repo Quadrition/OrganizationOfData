@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-namespace OrganizationOfData.DesktopClient.Views
+﻿namespace OrganizationOfData.DesktopClient.Views
 {
+    using OrganizationOfData.Windows;
+    using System.Windows;
+
     /// <summary>
     /// Interaction logic for NewFileWindow.xaml
     /// </summary>
-    public partial class NewFileWindow : Window
+    public partial class NewFileWindow : Window, IDialog
     {
         public NewFileWindow()
         {

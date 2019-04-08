@@ -46,6 +46,13 @@
   <ItemGroup>
     <Compile Include="ActionCommand.cs" />
     <Compile Include="BulkFileTypeConverter.cs" />
+    <Compile Include="DialogCloseRequestedEventArgs.cs" />
+    <Compile Include="DialogService.cs" />
+    <Compile Include="FileDialogService.cs" />
+    <Compile Include="IDialog.cs" />
+    <Compile Include="IDialogRequestClose.cs" />
+    <Compile Include="IDialogService.cs" />
+    <Compile Include="IFileDialogService.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

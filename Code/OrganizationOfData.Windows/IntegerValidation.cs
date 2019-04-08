@@ -4,18 +4,14 @@
     using System.Globalization;
     using System.Windows.Controls;
 
+    /// <summary>
+    /// Custom rule which checks if user input is integer value
+    /// </summary>
     public class IntegerValidation : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            string stringValue = Convert.ToString(value);
-
-            if (string.IsNullOrWhiteSpace(stringValue))
-            {
-                return new ValidationResult(false, "Broj je neispravan");
-            }
-
-            if (!int.TryParse(stringValue, out int result))
+            if (!int.TryParse(Convert.ToString(value), out int result))
             {
                 return new ValidationResult(false, "Broj je neispravan");
             }
