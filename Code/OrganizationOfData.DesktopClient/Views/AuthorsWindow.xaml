@@ -16,6 +16,16 @@
         Background="Transparent"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Autori" Height="400" Width="850" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard Duration="00:00:00.5" Storyboard.TargetProperty="Opacity">
+                    <DoubleAnimation From="0" To="1" Duration="00:00:00.5"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Border BorderThickness="0" CornerRadius="10" Background="White">
         <Grid>
 

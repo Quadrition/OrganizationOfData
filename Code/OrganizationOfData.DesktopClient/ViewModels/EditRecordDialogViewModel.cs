@@ -5,14 +5,11 @@
     using System;
     using System.Windows.Input;
 
-    /// <summary>
-    /// ViewModel containing all functionalities for NewFileWindow View
-    /// </summary>
-    public class NewFileWindowViewModel : ViewModel, IDialogRequestClose
+    public class EditRecordDialogViewModel : ViewModel, IDialogRequestClose
     {
         public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
 
-        #region BulkFileMembers
+        #region NewValues Members
 
         private BulkFile bulkFile;
         private BulkFileType bulkFileType;
@@ -60,7 +57,7 @@
 
         #endregion
 
-        public NewFileWindowViewModel()
+        public EditRecordDialogViewModel()
         {
             BulkFile = new BulkFileWithSerialOverrunZone()
             {

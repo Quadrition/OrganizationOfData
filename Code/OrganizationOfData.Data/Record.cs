@@ -47,5 +47,14 @@
         {
 
         }
+
+        // <summary>
+        /// Checks if all entity's properties are valid
+        /// </summary>
+        /// <returns>True if all properties is valid, otherwise false</returns>
+        public virtual bool IsValid()
+        {
+            return Person.IsValid();
+        }
     }
 }

@@ -9,9 +9,9 @@
     /// </summary>
     public class BucketControlViewModel : ViewModel
     {
-        private ICollection<RecordControlViewModel> recordControlViewModels;
+        private ObservableCollection<RecordControlViewModel> recordControlViewModels;
 
-        public ICollection<RecordControlViewModel> RecordControlViewModels
+        public ObservableCollection<RecordControlViewModel> RecordControlViewModels
         {
             get
             {

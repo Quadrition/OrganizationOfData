@@ -15,7 +15,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Simulacija serijske datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" Icon="pack://application:,,,/Resources/favicon.ico">
+        Title="Simulacija rasute datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
@@ -73,7 +73,7 @@
 
         <materialDesign:ColorZone Mode="PrimaryMid" Padding="5" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" materialDesign:ShadowAssist.ShadowDepth="Depth2">
             <StackPanel Orientation="Horizontal">
-                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowScalesCommand}">
+                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowNewRecordDialogCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Add" />
                         <TextBlock Margin="10 0 0 0">
@@ -86,11 +86,24 @@
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
                 </Separator>
-                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowScalesCommand}">
+                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowFindRecordRecordDialogCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Search" />
                         <TextBlock Margin="10 0 0 0">
                             Pretraži slog
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+                <Separator Background="{DynamicResource MaterialDesignBody}" Visibility="Collapsed">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowScalesCommand}" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Edit" />
+                        <TextBlock Margin="10 0 0 0">
+                            Izmeni slog
                         </TextBlock>
                     </StackPanel>
                 </Button>
@@ -99,7 +112,7 @@
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
                 </Separator>
-                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowScalesCommand}">
+                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowDeleteRecordRecordDialogCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Delete" />
                         <TextBlock Margin="10 0 0 0">
@@ -113,8 +126,9 @@
         <ScrollViewer Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
             <Grid Margin="5">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="192*" />
+                    <RowDefinition Height="31*" />
+                    <RowDefinition Height="160*"/>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -122,19 +136,19 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" />
                     </ScrollViewer>
                 </materialDesign:Card>
 
-                <GroupBox Header="Memorija" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" Grid.Row="1" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2">
+                <GroupBox Header="Memorija" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" Grid.Row="1" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Hidden">
                         <local:BucketControl DataContext="{Binding BucketControlViewModel}" Margin="0 0 0 10" />
                     </ScrollViewer>
                 </GroupBox>
 
-                <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="2">
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                         <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" />
                     </ScrollViewer>
@@ -150,15 +164,15 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Padding="8" FontSize="20" Text="{Binding}" Grid.ColumnSpan="2"/>
-                        <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Right" Margin="0 0 10 10" Grid.Row="1" Grid.ColumnSpan="2">
+                        <TextBlock Padding="8" FontSize="20" Text="{Binding NextStepMessage}" Grid.ColumnSpan="2"/>
+                        <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding NextStepCommand}" HorizontalAlignment="Right" Margin="0 0 10 10" Grid.Row="1" Grid.ColumnSpan="2">
                             Sledeći korak
                         </Button>
                     </Grid>
                 </materialDesign:Card>
             </Grid>
         </ScrollViewer>
-        
+
         <materialDesign:Snackbar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" MessageQueue="{Binding Messages}" />
     </Grid>
 </Window>

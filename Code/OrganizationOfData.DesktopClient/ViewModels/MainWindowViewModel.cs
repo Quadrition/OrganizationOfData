@@ -17,7 +17,7 @@
 
         public SnackbarMessageQueue Messages { get; set; }
 
-        #region PrimaryZoneMembers
+        #region PrimaryZone Members
 
         private PrimaryZoneControlViewModel primaryZoneControlViewModel;
 
@@ -36,7 +36,7 @@
 
         #endregion
 
-        #region OverrunZoneMembers
+        #region OverrunZone Members
 
         private OverrunZoneControlViewModel overrunZoneControlViewModel;
         private Visibility overrunZoneVisibility;
@@ -69,7 +69,7 @@
 
         #endregion
 
-        #region MemoryZoneMembers
+        #region MemoryZone Members
 
         private BucketControlViewModel bucketControlViewModel;
 
@@ -88,7 +88,7 @@
 
         #endregion
 
-        #region BulkFileMembers
+        #region BulkFile Members
 
         private BulkFile bulkFile;
         private string fileName;
@@ -151,7 +151,7 @@
             Messages = new SnackbarMessageQueue();
         }
 
-        #region NewFileMembers
+        #region NewFile Members
 
         public ICommand OpenNewFileWindowCommand
         {
@@ -177,7 +177,7 @@
 
         #endregion
 
-        #region AuthorMembers
+        #region Author Members
 
         public ICommand OpenAuthorsWindowsCommand
         {
@@ -196,7 +196,7 @@
 
         #endregion
 
-        #region FileSaveMembers
+        #region FileSave Members
 
         public ICommand FileSaveCommand
         {
@@ -243,7 +243,7 @@
 
         #endregion
 
-        #region OpenFileMembers
+        #region OpenFile Members
 
         public ICommand OpenFileCommand
         {
@@ -266,6 +266,136 @@
                 Messages.Enqueue("Uspešno ste učitali datoteku");
             }
         }
+
+        #endregion
+
+        #region ManipulateRecords Members
+
+        #region NewRecord Members
+
+        private NewRecordSimulation newRecordSimulation;
+
+        public ICommand ShowNewRecordDialogCommand
+        {
+            get
+            {
+                return new ActionCommand(p => ShowNewRecordDialog(), p => CanManipulateOverRecord);
+            }
+        }
+
+        private void ShowNewRecordDialog()
+        {
+            var viewModel = new NewRecordDialogViewModel();
+
+            bool? result = dialogService.ShowDialog(viewModel);
+
+            if (result.HasValue && result.Value)
+            {
+                newRecordSimulation = new NewRecordSimulation(bulkFile, viewModel.Record);
+
+                Messages.Enqueue("Uspešno ste pokrenuli simulaciju unosa novog sloga");
+            }
+        }
+
+        #endregion
+
+        #region FindRecord Members
+
+        public ICommand ShowFindRecordRecordDialogCommand
+        {
+            get
+            {
+                return new ActionCommand(p => ShowFindRecordRecordDialog(), p => CanManipulateOverRecord);
+            }
+        }
+
+        private void ShowFindRecordRecordDialog()
+        {
+            var viewModel = new FindRecordDialogViewModel();
+
+            bool? result = dialogService.ShowDialog(viewModel);
+
+            if (result.HasValue && result.Value)
+            {
+                Messages.Enqueue("Uspešno ste pokrenuli simulaciju traženja sloga");
+            }
+        }
+
+        #endregion
+
+        #region DeleteRecord Members
+
+        public ICommand ShowDeleteRecordRecordDialogCommand
+        {
+            get
+            {
+                return new ActionCommand(p => ShowDeleteRecordRecordDialog(), p => CanManipulateOverRecord);
+            }
+        }
+
+        private void ShowDeleteRecordRecordDialog()
+        {
+            var viewModel = new DeleteRecordDialogViewModel();
+
+            bool? result = dialogService.ShowDialog(viewModel);
+
+            if (result.HasValue && result.Value)
+            {
+                Messages.Enqueue("Uspešno ste pokrenuli simulaciju brisanja sloga");
+            }
+        }
+
+        #endregion
+
+        public bool CanManipulateOverRecord
+        {
+            get
+            {
+                return newRecordSimulation == null && bulkFile != null;
+            }
+        }
+
+        #region NextStep Members
+
+        private string nextStepMessage;
+
+        public string NextStepMessage
+        {
+            get
+            {
+                return nextStepMessage;
+            }
+            set
+            {
+                nextStepMessage = value;
+                NotifyPropertyChanged(nameof(NextStepMessage));
+            }
+        }
+
+        public ICommand NextStepCommand
+        {
+            get
+            {
+                return new ActionCommand(p => NextStep(), p => !CanManipulateOverRecord);
+            }
+        }
+
+        private void NextStep()
+        {
+            if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
+            {
+                PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels[newRecordSimulation.Column].UnSelect();
+            }
+            newRecordSimulation.NextStep();
+            NextStepMessage = newRecordSimulation.Message;
+
+            if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
+            {
+                PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels[newRecordSimulation.Column].Select();
+            }
+        }
+
+        #endregion
 
         #endregion
     }

@@ -25,7 +25,7 @@
     
     <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
         <materialDesign:Flipper.FrontContent>
-            <materialDesign:ColorZone Mode="Accent" Padding="5">
+            <materialDesign:ColorZone Mode="{Binding ColorZoneMode}" Padding="5">
                 <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Margin="5 3 5 3"  Command="{x:Static materialDesign:Flipper.FlipCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Id:" FontWeight="Bold" VerticalAlignment="Center" />
@@ -38,7 +38,7 @@
         </materialDesign:Flipper.FrontContent>
         <materialDesign:Flipper.BackContent>
             <StackPanel>
-                <materialDesign:ColorZone Mode="Accent" Padding="6">
+                <materialDesign:ColorZone Mode="{Binding ColorZoneMode}" Padding="6">
                     <StackPanel Orientation="Horizontal">
                         <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}">
                             <materialDesign:PackIcon Kind="ArrowLeft" />

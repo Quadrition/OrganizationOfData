@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
     <Compile Include="BulkFileTypeConverter.cs" />
     <Compile Include="DialogCloseRequestedEventArgs.cs" />
     <Compile Include="DialogService.cs" />
+    <Compile Include="EmptyValueConverter.cs" />
     <Compile Include="FileDialogService.cs" />
     <Compile Include="IDialog.cs" />
     <Compile Include="IDialogRequestClose.cs" />

@@ -3,6 +3,7 @@
     using OrganizationOfData.Windows;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     /// <summary>
     /// Reprezents a model class which is used as an example in application
@@ -13,9 +14,10 @@
         private int id;
         private string fullName;
         private string adress;
-        private int age;
+        private int? age;
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Id osobe je obavezan")]
+        [Required(ErrorMessage = "Id osobe je obavezan")]
+        [Range(1, int.MaxValue, ErrorMessage = "Id osobe mora biti između 1 i 2147483647")]
         public int Id
         {
             get
@@ -57,8 +59,8 @@
             }
         }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Broj godina osobe je neispravan")]
-        public int Age
+        [Range(0, 100, ErrorMessage = "Broj godina osobe može biti između 0 i 100")]
+        public int? Age
         {
             get
             {
@@ -77,6 +79,33 @@
         public Person()
         {
 
+        }
+
+        /// <summary>
+        /// Checks if property is valid
+        /// </summary>
+        /// <param name="propertyName">A property to be validated</param>
+        /// <returns>True if the property is valid, otherwise false</returns>
+        protected override string OnValidate(string propertyName)
+        {
+            return base.OnValidate(propertyName);
+        }
+
+        // <summary>
+        /// Checks if all entity's properties are valid
+        /// </summary>
+        /// <returns>True if all properties is valid, otherwise false</returns>
+        public virtual bool IsValid()
+        {
+            string[] ValidatedProperties =
+            {
+                "Id",
+                "FullName",
+                "Adress",
+                "Age"
+            };
+
+            return ValidatedProperties.FirstOrDefault(perp => OnValidate(perp) != null) == null;
         }
     }
 }

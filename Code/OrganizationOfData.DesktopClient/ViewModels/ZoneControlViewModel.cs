@@ -1,6 +1,7 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
 
@@ -9,9 +10,9 @@
     /// </summary>
     public abstract class ZoneControlViewModel : ViewModel
     {
-        protected ICollection<BucketControlViewModel> bucketControlViewModels;
+        protected ObservableCollection<BucketControlViewModel> bucketControlViewModels;
 
-        public ICollection<BucketControlViewModel> BucketControlViewModels
+        public ObservableCollection<BucketControlViewModel> BucketControlViewModels
         {
             get
             {
