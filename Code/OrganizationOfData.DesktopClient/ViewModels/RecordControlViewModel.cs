@@ -21,6 +21,19 @@
             {
                 record = value;
                 NotifyPropertyChanged(nameof(Record));
+
+                switch(record.Status)
+                {
+                    case Status.active:
+                        ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
+                        break;
+                    case Status.inactive:
+                        ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryMid;
+                        break;
+                    case Status.empty:
+                        ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+                        break;
+                }
             }
         }
 
@@ -44,7 +57,7 @@
         /// </summary>
         public RecordControlViewModel()
         {
-            ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+            ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
         }
 
         public void Select()
@@ -54,7 +67,18 @@
 
         public void UnSelect()
         {
-            ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+            switch (record.Status)
+            {
+                case Status.active:
+                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
+                    break;
+                case Status.inactive:
+                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryMid;
+                    break;
+                case Status.empty:
+                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+                    break;
+            }
         }
     }
 }

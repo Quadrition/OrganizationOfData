@@ -27,7 +27,7 @@
                 case Status.inactive:
                     return "Neaktivan";
                 case Status.empty:
-                    return "Obrisan";
+                    return "Prazan";
                 default:
                     throw new NotImplementedException();
             }
