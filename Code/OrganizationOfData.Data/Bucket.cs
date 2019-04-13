@@ -9,7 +9,7 @@
     [Serializable]
     public class Bucket : Model
     {
-        private Record[] records;
+        protected Record[] records;
 
         public Record[] Records
         {

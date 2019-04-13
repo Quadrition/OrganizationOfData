@@ -10,8 +10,8 @@
     [Serializable]
     public class Record : Model
     {
-        private Person person;
-        private Status status;
+        protected Person person;
+        protected Status status;
 
         public Person Person
         {
