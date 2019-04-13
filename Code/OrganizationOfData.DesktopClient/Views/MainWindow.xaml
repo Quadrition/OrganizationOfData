@@ -29,7 +29,7 @@
                 <MenuItem Header="_Učitaj" Icon="{materialDesign:PackIcon Kind=FileDownload}" Command="{Binding OpenFileCommand}"/>
                 <MenuItem Header="_Sačuvaj" Icon="{materialDesign:PackIcon Kind=ContentSave}" Command="{Binding FileSaveCommand}"/>
                 <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}" Command="{Binding FileSaveAsCommand}" />
-                <MenuItem Header="_Izađi" Icon="{materialDesign:PackIcon Kind=ExitToApp}"/>
+                <MenuItem Header="_Zatvori" Icon="{materialDesign:PackIcon Kind=Close}"/>
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
                 <MenuItem Header="_Dokumentacija" Icon="{materialDesign:PackIcon Kind=FileDocumentBoxMultiple}" />
@@ -97,22 +97,25 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                
+                <StackPanel>
+                    <GroupBox Header="Disk" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
 
-                <GroupBox Header="Memorija" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" Grid.Row="1" Grid.Column="1" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
-                </GroupBox>
+                        <StackPanel Grid.Column="0">
+                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Margin="5" Padding="10">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </ScrollViewer>
+                            </materialDesign:Card>
 
-                <StackPanel Grid.Column="0">
-                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Margin="5" Padding="10">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </ScrollViewer>
-                    </materialDesign:Card>
+                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="2">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </ScrollViewer>
+                            </materialDesign:Card>
+                        </StackPanel>
 
-                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Padding="10" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.RowSpan="2">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                        </ScrollViewer>
-                    </materialDesign:Card>
+                    </GroupBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
