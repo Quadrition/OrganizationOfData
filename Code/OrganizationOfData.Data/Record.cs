@@ -48,6 +48,19 @@
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="Record"/> class and copies data from existing Record
+        /// </summary>
+        /// <param name="record">Record which data should be copied</param>
+        public Record(Record record)
+        {
+            this.Person.Id = record.Person.Id;
+            this.Person.FullName = record.Person.FullName;
+            this.Person.Adress = record.Person.Adress;
+            this.Person.Age = record.Person.Age;
+            this.Status = record.Status;
+        }
+
         // <summary>
         /// Checks if all entity's properties are valid
         /// </summary>

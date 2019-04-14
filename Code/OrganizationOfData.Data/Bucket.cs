@@ -24,13 +24,29 @@
             }
         }
 
+        protected int address;
+
+        public int Address
+        {
+            get
+            {
+                return address;
+            }
+            set
+            {
+                address = value;
+                NotifyPropertyChanged(nameof(Address));
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of <see cref="Bucket"/>
         /// </summary>
         /// <param name="factor">Number of records inside of it</param>
-        public Bucket(int factor)
+        public Bucket(int factor, int address)
         {
             Records = new Record[factor];
+            Address = address;
         }
     }
 }

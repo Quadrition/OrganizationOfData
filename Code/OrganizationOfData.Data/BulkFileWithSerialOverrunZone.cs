@@ -23,7 +23,7 @@
 
             for (int i = 0; i < NumberOfBuckets; i++)
             {
-                bucket = new Bucket(Factor);
+                bucket = new Bucket(Factor, i);
                 for (int j = 0; j < Factor; j++)
                 {
                     record = new Record()
@@ -44,7 +44,7 @@
 
             for (int i = 0; i < NumberOfBuckets; i++)
             {
-                bucket = new Bucket(Factor);
+                bucket = new Bucket(Factor, i);
                 for (int j = 0; j < Factor; j++)
                 {
                     record = new Record()

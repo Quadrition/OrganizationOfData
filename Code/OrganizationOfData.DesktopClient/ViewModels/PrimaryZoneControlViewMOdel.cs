@@ -17,18 +17,18 @@
 
         }
 
-        public override void SetBuckets(ICollection<Bucket> buckets)
+        public override void SetBuckets(Bucket[] buckets)
         {
             BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 
-            foreach(Bucket bucket in buckets)
+            for (int i = 0; i < buckets.Length; i++)
             {
-                BucketControlViewModel bucketControlViewModel = new BucketControlViewModel()
+                BucketControlViewModel bucketControlViewModel = new BucketControlViewModel(i)
                 {
                     RecordControlViewModels = new ObservableCollection<RecordControlViewModel>()
                 };
                 
-                foreach(Record record in bucket.Records)
+                foreach(Record record in buckets[i].Records)
                 {
                     bucketControlViewModel.RecordControlViewModels.Add(new RecordControlViewModel()
                     {

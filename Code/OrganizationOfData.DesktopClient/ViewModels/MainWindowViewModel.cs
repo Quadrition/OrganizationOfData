@@ -71,17 +71,17 @@
 
         #region MemoryZone Members
 
-        private BucketControlViewModel bucketControlViewModel;
+        private BucketControlViewModel memoryBucketControlViewModel;
 
-        public BucketControlViewModel BucketControlViewModel
+        public BucketControlViewModel MemoryBucketControlViewModel
         {
             get
             {
-                return bucketControlViewModel;
+                return memoryBucketControlViewModel;
             }
             set
             {
-                bucketControlViewModel = value;
+                memoryBucketControlViewModel = value;
                 NotifyPropertyChanged();
             }
         }
@@ -146,7 +146,7 @@
             OverrunZoneControlViewModel = new OverrunZoneControlViewModel();
             OverrunZoneVisibility = Visibility.Collapsed;
 
-            BucketControlViewModel = new BucketControlViewModel();
+            MemoryBucketControlViewModel = null;
 
             Messages = new SnackbarMessageQueue();
         }

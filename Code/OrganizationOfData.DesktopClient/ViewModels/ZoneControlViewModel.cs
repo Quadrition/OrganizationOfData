@@ -38,6 +38,6 @@
         /// and adds them to ZoneControl
         /// </summary>
         /// <param name="buckets">Buckets to be added</param>
-        public abstract void SetBuckets(ICollection<Bucket> buckets);
+        public abstract void SetBuckets(Bucket[] buckets);
     }
 }

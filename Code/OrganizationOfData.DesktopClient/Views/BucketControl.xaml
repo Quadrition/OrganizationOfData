@@ -21,11 +21,22 @@
             <local:RecordControl />
         </DataTemplate>
     </UserControl.Resources>
-    <ItemsControl ItemsSource="{Binding RecordControlViewModels}" ItemTemplate="{StaticResource RecordControl}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+
+    <Border BorderThickness="2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Margin="10" Padding="5">
+        <StackPanel Orientation="Horizontal">
+            <Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
+                <StackPanel>
+                    <Label Content="Adresa" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    <Label Content="{Binding Address}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                </StackPanel>
+            </Border>
+            <ItemsControl Padding="5 0 5 0" ItemsSource="{Binding RecordControlViewModels}" ItemTemplate="{StaticResource RecordControl}" VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
 </UserControl>

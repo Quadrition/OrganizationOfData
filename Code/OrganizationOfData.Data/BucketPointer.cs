@@ -10,7 +10,7 @@
         private BucketPointer next;
         private int blankRecords;
 
-        public BucketPointer(int factor) : base(factor)
+        public BucketPointer(int factor, int address) : base(factor, address)
         {
             
         }
