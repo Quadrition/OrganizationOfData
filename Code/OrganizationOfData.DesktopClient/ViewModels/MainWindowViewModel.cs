@@ -6,6 +6,7 @@
     using System.Windows;
     using System;
     using MaterialDesignThemes.Wpf;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// ViewModel containing all functionalities for MainWindow View
@@ -384,14 +385,14 @@
         {
             if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
             {
-                PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels[newRecordSimulation.Column].UnSelect();
+                (PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[newRecordSimulation.Column].UnSelect();
             }
             newRecordSimulation.NextStep();
             NextStepMessage = newRecordSimulation.Message;
 
             if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
             {
-                PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels[newRecordSimulation.Column].Select();
+                (PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[newRecordSimulation.Column].Select();
             }
         }
 
