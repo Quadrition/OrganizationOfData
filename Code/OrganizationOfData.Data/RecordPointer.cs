@@ -5,18 +5,18 @@
     [Serializable]
     public class RecordPointer : Record
     {
-        private Record nextRecord;
+        private Record u;
 
-        public Record NextRecord
+        public Record U
         {
             get
             {
-                return nextRecord;
+                return u;
             }
             set
             {
-                nextRecord = value;
-                NotifyPropertyChanged(nameof(NextRecord));
+                u = value;
+                NotifyPropertyChanged(nameof(U));
             }
         }
 

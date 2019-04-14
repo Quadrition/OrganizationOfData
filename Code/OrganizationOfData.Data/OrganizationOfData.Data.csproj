@@ -46,6 +46,7 @@
     <Compile Include="Bucket.cs" />
     <Compile Include="BucketPointer.cs" />
     <Compile Include="BulkFile.cs" />
+    <Compile Include="BulkFilePrimaryOverrunZone.cs" />
     <Compile Include="BulkFileWithSerialOverrunZone.cs" />
     <Compile Include="KeyTransformations.cs" />
     <Compile Include="NewRecordSimulation.cs" />
