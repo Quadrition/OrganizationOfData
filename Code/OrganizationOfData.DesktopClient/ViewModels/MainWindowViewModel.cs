@@ -19,6 +19,8 @@
 
         #region PrimaryZone Members
 
+        #region PrimaryOverrunZone Members
+
         private PrimaryZoneControlViewModel primaryZoneControlViewModel;
         private Visibility primaryZoneVisibility;
 
@@ -56,6 +58,12 @@
                 }
             }
         }
+
+        #endregion
+
+        #region PrimaryPrimaryZone Members
+
+        #endregion
 
         #endregion
 
@@ -104,6 +112,20 @@
         #region MemoryZone Members
 
         private BucketMemoryControlViewModel bucketMemoryControlViewModel;
+        private Visibility bucketMemoryControlVisibility;
+
+        public Visibility BucketMemoryControlVisibility
+        {
+            get
+            {
+                return bucketMemoryControlVisibility;
+            }
+            set
+            {
+                bucketMemoryControlVisibility = value;
+                NotifyPropertyChanged(nameof(BucketMemoryControlVisibility));
+            }
+        }
 
         public BucketMemoryControlViewModel BucketMemoryControlViewModel
         {
