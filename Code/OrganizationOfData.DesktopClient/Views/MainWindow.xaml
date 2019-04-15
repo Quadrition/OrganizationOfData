@@ -108,16 +108,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
-                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource MaterialDesignPaper}" Margin="5" Padding="10">
-                        <StackPanel>
-                            <TextBlock FontSize="20">
-                                Memorija
-                            </TextBlock>
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <local:BucketControl DataContext="{Binding BucketControlViewModel}" Margin="0 0 0 10" />
-                            </ScrollViewer>
-                        </StackPanel>
-                    </materialDesign:Card>
+                    <local:BucketMemoryControl DataContext="{Binding BucketMemoryControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>

@@ -27,7 +27,7 @@
 
             for (int i = 0; i < buckets.Length; i++)
             {
-                BucketControlViewModel bucketControlViewModel = new BucketControlViewModel(i)
+                BucketControlViewModel bucketControlViewModel = new BucketControlViewModel(buckets[i].Address)
                 {
                     RecordControlViewModels = new ObservableCollection<RecordControlViewModel>()
                 };

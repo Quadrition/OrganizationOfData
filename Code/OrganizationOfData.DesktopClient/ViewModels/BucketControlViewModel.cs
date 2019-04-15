@@ -59,7 +59,7 @@
 
             foreach (RecordControlViewModel recordControlViewModel in bucketControlViewModel.RecordControlViewModels)
             {
-                RecordControlViewModels.Add(new RecordControlViewModel()
+                RecordControlViewModels.Add(new RecordControlViewModel
                 {
                     Record = new Record(recordControlViewModel.Record)
                 });

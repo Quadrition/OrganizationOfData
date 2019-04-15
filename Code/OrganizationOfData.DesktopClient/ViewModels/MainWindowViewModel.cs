@@ -72,17 +72,17 @@
 
         #region MemoryZone Members
 
-        private BucketControlViewModel memoryBucketControlViewModel;
+        private BucketMemoryControlViewModel bucketMemoryControlViewModel;
 
-        public BucketControlViewModel MemoryBucketControlViewModel
+        public BucketMemoryControlViewModel BucketMemoryControlViewModel
         {
             get
             {
-                return memoryBucketControlViewModel;
+                return bucketMemoryControlViewModel;
             }
             set
             {
-                memoryBucketControlViewModel = value;
+                bucketMemoryControlViewModel = value;
                 NotifyPropertyChanged();
             }
         }
@@ -147,7 +147,7 @@
             OverrunZoneControlViewModel = new OverrunZoneControlViewModel();
             OverrunZoneVisibility = Visibility.Collapsed;
 
-            MemoryBucketControlViewModel = null;
+            BucketMemoryControlViewModel = null;
 
             Messages = new SnackbarMessageQueue();
         }
@@ -276,6 +276,19 @@
 
         private NewRecordSimulation newRecordSimulation;
 
+        public NewRecordSimulation NewRecordSimulation
+        {
+            get
+            {
+                return newRecordSimulation;
+            }
+            set
+            {
+                newRecordSimulation = value;
+                NotifyPropertyChanged(nameof(NewRecordSimulation));
+            }
+        }
+
         public ICommand ShowNewRecordDialogCommand
         {
             get
@@ -292,7 +305,7 @@
 
             if (result.HasValue && result.Value)
             {
-                newRecordSimulation = new NewRecordSimulation(bulkFile, viewModel.Record);
+                NewRecordSimulation = new NewRecordSimulation(bulkFile as BulkFileWithSerialOverrunZone, viewModel.Record);
 
                 Messages.Enqueue("Uspešno ste pokrenuli simulaciju unosa novog sloga");
             }
@@ -383,16 +396,61 @@
 
         private void NextStep()
         {
-            if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
-            {
-                (PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[newRecordSimulation.Column].UnSelect();
-            }
-            newRecordSimulation.NextStep();
-            NextStepMessage = newRecordSimulation.Message;
+            bool result = NewRecordSimulation.NextStep();
+            NextStepMessage = NewRecordSimulation.Message;
 
-            if (newRecordSimulation.Row != -1 && newRecordSimulation.Column != -1)
+            if (NewRecordSimulation.Row != -1)
             {
-                (PrimaryZoneControlViewModel.BucketControlViewModels[newRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[newRecordSimulation.Column].Select();
+                if (NewRecordSimulation.OverrunZone == false)
+                {
+                    BucketMemoryControlViewModel = new BucketMemoryControlViewModel
+                    {
+                        BucketControlViewModel = new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
+                    };
+                }
+                else
+                {
+                    BucketMemoryControlViewModel = new BucketMemoryControlViewModel
+                    {
+                        BucketControlViewModel = new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
+                    };
+                }
+            }
+            else
+            {
+                BucketMemoryControlViewModel = null;
+            }
+
+            if (NewRecordSimulation.Column != -1)
+            {
+                (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Select();
+            }
+
+            if (result == false)
+            {
+                if (NewRecordSimulation.Row != -1 && NewRecordSimulation.Column != -1)
+                {
+                    (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
+                    (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Select();
+                }
+                if (NewRecordSimulation.OverrunZone == false)
+                {
+                    BulkFile.PrimaryZone[NewRecordSimulation.Row].Records[NewRecordSimulation.Column] = NewRecordSimulation.NewRecord;
+                    (PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column] = new RecordControlViewModel()
+                    {
+                        Record = NewRecordSimulation.NewRecord
+                    };
+                }
+                else
+                {
+                    (BulkFile as BulkFileWithSerialOverrunZone).OverrunZone[NewRecordSimulation.Row].Records[NewRecordSimulation.Column] = NewRecordSimulation.NewRecord;
+                    (OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column] = new RecordControlViewModel()
+                    {
+                        Record = NewRecordSimulation.NewRecord
+                    };
+                }
+
+                NewRecordSimulation = null;
             }
         }
 

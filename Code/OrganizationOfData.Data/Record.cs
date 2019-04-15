@@ -54,10 +54,13 @@
         /// <param name="record">Record which data should be copied</param>
         public Record(Record record)
         {
-            this.Person.Id = record.Person.Id;
-            this.Person.FullName = record.Person.FullName;
-            this.Person.Adress = record.Person.Adress;
-            this.Person.Age = record.Person.Age;
+            this.Person = new Person
+            {
+                Id = record.Person.Id,
+                FullName = record.Person.FullName,
+                Adress = record.Person.Adress,
+                Age = record.Person.Age
+            };
             this.Status = record.Status;
         }
 

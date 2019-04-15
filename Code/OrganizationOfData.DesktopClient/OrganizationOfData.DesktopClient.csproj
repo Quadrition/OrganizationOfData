@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="ViewModels\AuthorsWindowViewModel.cs" />
     <Compile Include="ViewModels\BucketControlViewModel.cs" />
+    <Compile Include="ViewModels\BucketMemoryControlViewModel.cs" />
     <Compile Include="ViewModels\DeleteRecordDialogViewModel.cs" />
     <Compile Include="ViewModels\EditRecordDialogViewModel.cs" />
     <Compile Include="ViewModels\FindRecordDialogViewModel.cs" />
@@ -100,6 +101,9 @@
     </Compile>
     <Compile Include="Views\BucketControl.xaml.cs">
       <DependentUpon>BucketControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BucketMemoryControl.xaml.cs">
+      <DependentUpon>BucketMemoryControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeleteRecordDialog.xaml.cs">
       <DependentUpon>DeleteRecordDialog.xaml</DependentUpon>
@@ -161,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BucketControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BucketMemoryControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
