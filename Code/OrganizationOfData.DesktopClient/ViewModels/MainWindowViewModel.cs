@@ -6,7 +6,6 @@
     using System.Windows;
     using System;
     using MaterialDesignThemes.Wpf;
-    using System.Collections.ObjectModel;
 
     /// <summary>
     /// ViewModel containing all functionalities for MainWindow View
@@ -21,6 +20,20 @@
         #region PrimaryZone Members
 
         private PrimaryZoneControlViewModel primaryZoneControlViewModel;
+        private Visibility primaryZoneVisibility;
+
+        public Visibility PrimaryZoneVisibility
+        {
+            get
+            {
+                return primaryZoneVisibility;
+            }
+            set
+            {
+                primaryZoneVisibility = value;
+                NotifyPropertyChanged(nameof(PrimaryZoneVisibility));
+            }
+        }
 
         public PrimaryZoneControlViewModel PrimaryZoneControlViewModel
         {
@@ -32,6 +45,15 @@
             {
                 primaryZoneControlViewModel = value;
                 NotifyPropertyChanged(nameof(PrimaryZoneControlViewModel));
+
+                if (primaryZoneControlViewModel == null)
+                {
+                    PrimaryZoneVisibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    PrimaryZoneVisibility = Visibility.Visible;
+                }
             }
         }
 
@@ -52,6 +74,15 @@
             {
                 overrunZoneControlViewModel = value;
                 NotifyPropertyChanged(nameof(OverrunZoneControlViewModel));
+
+                if (overrunZoneControlViewModel == null)
+                {
+                    OverrunZoneVisibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    OverrunZoneVisibility = Visibility.Visible;
+                }
             }
         }
 
@@ -92,7 +123,21 @@
         #region BulkFile Members
 
         private BulkFile bulkFile;
+        private BulkFileType? bulkFileType;
         private string fileName;
+
+        public BulkFileType? BulkFileType
+        {
+            get
+            {
+                return bulkFileType;
+            }
+            set
+            {
+                bulkFileType = value;
+                NotifyPropertyChanged(nameof(BulkFileType));
+            }
+        }
 
         public BulkFile BulkFile
         {
@@ -105,15 +150,23 @@
                 bulkFile = value;
                 NotifyPropertyChanged(nameof(BulkFile));
 
-                PrimaryZoneControlViewModel.SetBuckets(BulkFile.PrimaryZone);
+                if (value == null)
+                {
+                    BulkFileType = null;
+                    PrimaryZoneControlViewModel = null;
+                    OverrunZoneControlViewModel = null;
+                }
+
                 switch (value)
                 {
                     case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
-                        OverrunZoneVisibility = Visibility.Visible;
-                        OverrunZoneControlViewModel.SetBuckets(bulkFileWithSerialOverrunZone.OverrunZone);
+                        PrimaryZoneControlViewModel = new PrimaryZoneControlViewModel(bulkFileWithSerialOverrunZone.PrimaryZone);
+                        OverrunZoneControlViewModel = new OverrunZoneControlViewModel(bulkFileWithSerialOverrunZone.OverrunZone);
+                        BulkFileType = Windows.BulkFileType.withSerialOverrunZone;
                         break;
-                    default:
-                        throw new NotImplementedException();
+                    case BulkFilePrimaryOverrunZone bulkFilePrimaryOverrunZone:
+                        BulkFileType = Windows.BulkFileType.withSerialOverrunPrimaryZone;
+                        break;
                 }
             }
         }
@@ -142,10 +195,8 @@
             this.dialogService = dialogService;
             this.fileDialogService = fileDialogService;
 
-            PrimaryZoneControlViewModel = new PrimaryZoneControlViewModel();
-
-            OverrunZoneControlViewModel = new OverrunZoneControlViewModel();
-            OverrunZoneVisibility = Visibility.Collapsed;
+            PrimaryZoneControlViewModel = null;
+            OverrunZoneControlViewModel = null;
 
             BucketMemoryControlViewModel = null;
 
@@ -197,6 +248,32 @@
 
         #endregion
 
+        #region OpenFile Members
+
+        public ICommand OpenFileCommand
+        {
+            get
+            {
+                return new ActionCommand(p => OpenFile());
+            }
+        }
+
+        private void OpenFile()
+        {
+            fileDialogService.Title = "Izaberite fajl";
+            fileDialogService.Filter = "Rasuta datoteka (*.bfo;*.bfp)|*.bfo;*.bfp|Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo|Rasuta datoteka sa zonom prekoračenja u primarnoj zoni (*.bfp)|*.bfp";
+            fileDialogService.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            if (fileDialogService.ShowOpenFileDialog() == true)
+            {
+                FileName = fileDialogService.FileName;
+                BulkFile = BusinessContext.ReadFromBinaryFile(FileName);
+                Messages.Enqueue("Uspešno ste učitali datoteku");
+            }
+        }
+
+        #endregion
+
         #region FileSave Members
 
         public ICommand FileSaveCommand
@@ -215,7 +292,7 @@
             }
             else
             {
-                BusinessContext.WriteToBinaryFile(FileName, BulkFile as BulkFileWithSerialOverrunZone);
+                BusinessContext.WriteToBinaryFile(FileName, BulkFile);
                 Messages.Enqueue("Uspešno ste sačuvali datoteku");
             }
         }
@@ -231,40 +308,48 @@
         public void FileSaveAs()
         {
             fileDialogService.Title = "Sačuvajte datoteku";
-            fileDialogService.Filter = "Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo";
+
+            switch(BulkFile)
+            {
+                case BulkFilePrimaryOverrunZone bulkFilePrimaryOverrunZone:
+                    fileDialogService.Filter = "Rasuta datoteka sa zonom prekoračenja u primarnoj zoni (*.bfp)|*.bfp";
+                    break;
+                case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
+                    fileDialogService.Filter = "Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo";
+                    break;
+            }
             fileDialogService.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
             if (fileDialogService.ShowSaveFileDialog() == true)
             {
                 FileName = fileDialogService.FileName;
-                BusinessContext.WriteToBinaryFile(FileName, BulkFile as BulkFileWithSerialOverrunZone);
+                BusinessContext.WriteToBinaryFile(FileName, BulkFile);
                 Messages.Enqueue("Uspešno ste sačuvali datoteku");
             }
         }
 
         #endregion
 
-        #region OpenFile Members
+        #region CloseFile Members
 
-        public ICommand OpenFileCommand
+        public ICommand CloseFileCommand
         {
             get
             {
-                return new ActionCommand(p => OpenFile());
+                return new ActionCommand(p => CloseFile(), p => IsFileOpened);
             }
         }
 
-        private void OpenFile()
+        private void CloseFile()
         {
-            fileDialogService.Title = "Izaberite fajl";
-            fileDialogService.Filter = "Rasuta datoteka sa serijskom zonom prekoračenja (*.bfo)|*.bfo";
-            fileDialogService.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            BulkFile = null;
+        }
 
-            if (fileDialogService.ShowOpenFileDialog() == true)
+        private bool IsFileOpened
+        {
+            get
             {
-                FileName = fileDialogService.FileName;
-                BulkFile = BusinessContext.ReadFromBinaryFile(FileName);
-                Messages.Enqueue("Uspešno ste učitali datoteku");
+                return BulkFile != null;
             }
         }
 
@@ -314,6 +399,21 @@
         #endregion
 
         #region FindRecord Members
+
+        private FindRecordSimulation findRecordSimulation;
+
+        public FindRecordSimulation FindRecordSimulation
+        {
+            get
+            {
+                return findRecordSimulation;
+            }
+            set
+            {
+                findRecordSimulation = value;
+                NotifyPropertyChanged(nameof(FindRecordSimulation));
+            }
+        }
 
         public ICommand ShowFindRecordRecordDialogCommand
         {
@@ -365,7 +465,7 @@
         {
             get
             {
-                return newRecordSimulation == null && bulkFile != null;
+                return BulkFile != null && NewRecordSimulation == null;
             }
         }
 
@@ -390,12 +490,20 @@
         {
             get
             {
-                return new ActionCommand(p => NextStep(), p => !CanManipulateOverRecord);
+                return new ActionCommand(p => NextStep(), p => CanManipulateOverRecord);
             }
         }
 
         private void NextStep()
         {
+            if (NewRecordSimulation != null)
+            {
+
+            }
+            else if (FindRecordSimulation != null)
+            {
+
+            }
             bool result = NewRecordSimulation.NextStep();
             NextStepMessage = NewRecordSimulation.Message;
 
@@ -423,31 +531,25 @@
 
             if (NewRecordSimulation.Column != -1)
             {
-                (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Select();
+                BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Select();
             }
 
             if (result == false)
             {
                 if (NewRecordSimulation.Row != -1 && NewRecordSimulation.Column != -1)
                 {
-                    (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
-                    (BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column].Select();
+                    BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
+                    BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Select();
                 }
                 if (NewRecordSimulation.OverrunZone == false)
                 {
-                    BulkFile.PrimaryZone[NewRecordSimulation.Row].Records[NewRecordSimulation.Column] = NewRecordSimulation.NewRecord;
-                    (PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column] = new RecordControlViewModel()
-                    {
-                        Record = NewRecordSimulation.NewRecord
-                    };
+                    PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Person = NewRecordSimulation.NewRecord.Person;
+                    PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Status = Status.active;
                 }
                 else
                 {
-                    (BulkFile as BulkFileWithSerialOverrunZone).OverrunZone[NewRecordSimulation.Row].Records[NewRecordSimulation.Column] = NewRecordSimulation.NewRecord;
-                    (OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels as ObservableCollection<RecordControlViewModel>)[NewRecordSimulation.Column] = new RecordControlViewModel()
-                    {
-                        Record = NewRecordSimulation.NewRecord
-                    };
+                    OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Person = NewRecordSimulation.NewRecord.Person;
+                    OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Status = Status.active;
                 }
 
                 NewRecordSimulation = null;

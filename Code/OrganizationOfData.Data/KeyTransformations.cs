@@ -10,7 +10,7 @@ namespace OrganizationOfData.Data
     {
         public static int ResidualSplitting(int key, int numberOfBuckets)
         {
-            return key % numberOfBuckets - 1;
+            return key % numberOfBuckets;
         }
     }
 }

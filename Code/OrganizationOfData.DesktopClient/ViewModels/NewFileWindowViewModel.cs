@@ -51,9 +51,12 @@
                         };
                         break;
                     case BulkFileType.withSerialOverrunPrimaryZone:
-                        throw new NotImplementedException();
-                    default:
-                        throw new NotImplementedException();
+                        BulkFile = new BulkFilePrimaryOverrunZone()
+                        {
+                            Factor = 3,
+                            NumberOfBuckets = 3
+                        };
+                        break;
                 }
             }
         }

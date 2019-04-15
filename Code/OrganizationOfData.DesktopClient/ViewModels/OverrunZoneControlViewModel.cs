@@ -17,31 +17,9 @@
 
         }
 
-        /// <summary>
-        /// Overrides a base SetBuckets class from <see cref="ZoneControlViewModel"/> base class
-        /// </summary>
-        /// <param name="buckets">Buckets to be added</param>
-        public override void SetBuckets(Bucket[] buckets)
+        public OverrunZoneControlViewModel(Bucket[] buckets) : base(buckets)
         {
-            BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 
-            for (int i = 0; i < buckets.Length; i++)
-            {
-                BucketControlViewModel bucketControlViewModel = new BucketControlViewModel(buckets[i].Address)
-                {
-                    RecordControlViewModels = new ObservableCollection<RecordControlViewModel>()
-                };
-
-                foreach (Record record in buckets[i].Records)
-                {
-                    bucketControlViewModel.RecordControlViewModels.Add(new RecordControlViewModel()
-                    {
-                        Record = record
-                    });
-                }
-
-                BucketControlViewModels.Add(bucketControlViewModel);
-            }
         }
     }
 }

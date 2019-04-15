@@ -18,7 +18,12 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TransformationMethod method = (TransformationMethod)value;
+            TransformationMethod? method = (TransformationMethod?)value;
+
+            if (method == null)
+            {
+                return null;
+            }
 
             switch (method)
             {
@@ -29,7 +34,7 @@
                 case TransformationMethod.overlap:
                     return "Preklapanja";
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentException();
             }
         }
 

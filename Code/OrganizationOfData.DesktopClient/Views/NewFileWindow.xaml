@@ -70,7 +70,7 @@
                 </StackPanel>
             </materialDesign:Card>
 
-            <ComboBox Grid.Row="1" ItemsSource="{Binding Source={StaticResource bulkFileTypes}}" Width="225" materialDesign:HintAssist.Hint="Zona prekoračenja" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedItem="{Binding BulkFileType}">
+            <ComboBox Grid.Row="1" ItemsSource="{Binding Source={StaticResource bulkFileTypes}}" Width="Auto" HorizontalAlignment="Center" materialDesign:HintAssist.Hint="Tip datoteke" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedItem="{Binding BulkFileType}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource bulkFileTypeConverter}}"/>

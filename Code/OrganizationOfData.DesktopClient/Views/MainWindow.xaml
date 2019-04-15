@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OrganizationOfData.DesktopClient.Views"
         xmlns:viewModels="clr-namespace:OrganizationOfData.DesktopClient.ViewModels"
+        xmlns:windows="clr-namespace:OrganizationOfData.Windows;assembly=OrganizationOfData.Windows"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type viewModels:MainWindowViewModel}}"
@@ -17,6 +18,8 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Simulacija rasute datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" WindowState="Maximized" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
+        <windows:BulkFileTypeConverter x:Key="bulkFileTypeConverter" />
+        <windows:TransformationMethodConverter x:Key="transformationMethodConverter" />
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
         </DataTemplate>
@@ -29,7 +32,7 @@
                 <MenuItem Header="_Učitaj" Icon="{materialDesign:PackIcon Kind=FileDownload}" Command="{Binding OpenFileCommand}"/>
                 <MenuItem Header="_Sačuvaj" Icon="{materialDesign:PackIcon Kind=ContentSave}" Command="{Binding FileSaveCommand}"/>
                 <MenuItem Header="_Sačuvaj kao" Icon="{materialDesign:PackIcon Kind=ContentSaveSettings}" Command="{Binding FileSaveAsCommand}" />
-                <MenuItem Header="_Zatvori" Icon="{materialDesign:PackIcon Kind=Close}"/>
+                <MenuItem Header="_Zatvori" Icon="{materialDesign:PackIcon Kind=Close}" Command="{Binding CloseFileCommand}"/>
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
                 <MenuItem Header="_Dokumentacija" Icon="{materialDesign:PackIcon Kind=FileDocumentBoxMultiple}" />
@@ -101,8 +104,8 @@
                 <StackPanel>
                     <GroupBox Header="Disk" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
                         <StackPanel Grid.Column="0">
-                            <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding PrimaryZoneVisibility}" />
+                            <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding OverrunZoneVisibility}" />
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
@@ -134,6 +137,7 @@
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -141,13 +145,16 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Label FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip datoteke:" VerticalAlignment="Center"  />
-                                    <Label Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+                                    <Label Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFileType, Converter={StaticResource bulkFileTypeConverter}}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
                                     <Label Grid.Row="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Faktor baketiranja:" VerticalAlignment="Center" />
                                     <Label Grid.Row="1" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.NumberOfBuckets}" VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
                                     <Label Grid.Row="2" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Broj blokova:"  VerticalAlignment="Center" />
                                     <Label Grid.Row="2" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.Factor}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+
+                                    <Label Grid.Row="3" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip transformacije:"  VerticalAlignment="Center" />
+                                    <Label Grid.Row="3" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.TransformationMethod, Converter={StaticResource transformationMethodConverter}}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
                                 </Grid>
                             </DockPanel>
                         </Border>

@@ -17,16 +17,21 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            BulkFileType status = (BulkFileType)value;
+            BulkFileType? status = (BulkFileType?)value;
+
+            if (status == null)
+            {
+                return null;
+            }
 
             switch (status)
             {
                 case BulkFileType.withSerialOverrunZone:
-                    return "Zona prekoračenja";
+                    return "Rasuta datoteka sa serijskom zonom prekoračenja";
                 case BulkFileType.withSerialOverrunPrimaryZone:
-                    return "Primarna zona";
+                    return "Rasuta datoteka sa zonom prekoračenja u primarnoj zoni";
                 default:
-                    throw new NotImplementedException();
+                    throw new ArgumentException();
             }
         }
 

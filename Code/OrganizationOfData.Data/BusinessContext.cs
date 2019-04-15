@@ -14,12 +14,12 @@
         /// <param name="filePath">The file path to write the object instance to.</param>
         /// <param name="objectToWrite">The object instance to write to the binary file.</param>
         /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToBinaryFile(string filePath, BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone, bool append = false)
+        public static void WriteToBinaryFile(string filePath, BulkFile bulkFile, bool append = false)
         {
             using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
             {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, bulkFileWithSerialOverrunZone);
+                var binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(stream, bulkFile);
             }
         }
 
@@ -29,12 +29,12 @@
         /// <typeparam name="T">The type of object to read from the binary file.</typeparam>
         /// <param name="filePath">The file path to read the object instance from.</param>
         /// <returns>Returns a new instance of the object read from the binary file.</returns>
-        public static BulkFileWithSerialOverrunZone ReadFromBinaryFile(string filePath)
+        public static BulkFile ReadFromBinaryFile(string filePath)
         {
             using (Stream stream = File.Open(filePath, FileMode.Open))
             {
                 var binaryFormatter = new BinaryFormatter();
-                return (BulkFileWithSerialOverrunZone)binaryFormatter.Deserialize(stream);
+                return (BulkFile)binaryFormatter.Deserialize(stream);
             }
         }
     }

@@ -10,9 +10,9 @@
     /// </summary>
     public abstract class ZoneControlViewModel : ViewModel
     {
-        protected ObservableCollection<BucketControlViewModel> bucketControlViewModels;
+        protected BucketControlViewModel[] bucketControlViewModels;
 
-        public ObservableCollection<BucketControlViewModel> BucketControlViewModels
+        public BucketControlViewModel[] BucketControlViewModels
         {
             get
             {
@@ -33,11 +33,14 @@
 
         }
 
-        /// <summary>
-        /// Creates a set of <see cref="BucketControlViewModel"/> based on passed buckets
-        /// and adds them to ZoneControl
-        /// </summary>
-        /// <param name="buckets">Buckets to be added</param>
-        public abstract void SetBuckets(Bucket[] buckets);
+        public ZoneControlViewModel(Bucket[] buckets)
+        {
+            BucketControlViewModels = new BucketControlViewModel[buckets.Length];
+
+            for (int i = 0; i < buckets.Length; i++)
+            {
+                BucketControlViewModels[i] = new BucketControlViewModel(buckets[i]);
+            }
+        }
     }
 }

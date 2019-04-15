@@ -10,9 +10,9 @@
     /// </summary>
     public class BucketControlViewModel : ViewModel
     {
-        private ICollection<RecordControlViewModel> recordControlViewModels;
+        private RecordControlViewModel[] recordControlViewModels;
 
-        public ICollection<RecordControlViewModel> RecordControlViewModels
+        public RecordControlViewModel[] RecordControlViewModels
         {
             get
             {
@@ -43,10 +43,10 @@
         /// <summary>
         /// Initializes a new instance of <see cref="BucketControlViewModel"/> class
         /// </summary>
-        public BucketControlViewModel(int address)
+        public BucketControlViewModel(int address, int factor)
         {
-            RecordControlViewModels = new ObservableCollection<RecordControlViewModel>();
             Address = address;
+            RecordControlViewModels = new RecordControlViewModel[factor];
         }
 
         /// <summary>
@@ -54,15 +54,26 @@
         /// </summary>
         public BucketControlViewModel(BucketControlViewModel bucketControlViewModel)
         {
-            RecordControlViewModels = new ObservableCollection<RecordControlViewModel>();
+            RecordControlViewModels = new RecordControlViewModel[bucketControlViewModel.RecordControlViewModels.Length];
             Address = bucketControlViewModel.Address;
 
-            foreach (RecordControlViewModel recordControlViewModel in bucketControlViewModel.RecordControlViewModels)
+            for (int i = 0; i < bucketControlViewModel.RecordControlViewModels.Length; i++)
             {
-                RecordControlViewModels.Add(new RecordControlViewModel
+                RecordControlViewModels[i] = new RecordControlViewModel()
                 {
-                    Record = new Record(recordControlViewModel.Record)
-                });
+                    Record = new Record(bucketControlViewModel.RecordControlViewModels[i].Record)
+                };
+            }
+        }
+
+        public BucketControlViewModel(Bucket bucket) : this(bucket.Address, bucket.Records.Length)
+        {
+            for (int i = 0; i < bucket.Records.Length; i++)
+            {
+                RecordControlViewModels[i] = new RecordControlViewModel()
+                {
+                    Record = bucket.Records[i]
+                };
             }
         }
     }

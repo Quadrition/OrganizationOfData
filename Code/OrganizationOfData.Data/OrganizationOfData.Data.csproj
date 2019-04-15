@@ -48,6 +48,8 @@
     <Compile Include="BulkFile.cs" />
     <Compile Include="BulkFilePrimaryOverrunZone.cs" />
     <Compile Include="BulkFileWithSerialOverrunZone.cs" />
+    <Compile Include="DeleteRecordSimulation.cs" />
+    <Compile Include="FindRecordSimulation.cs" />
     <Compile Include="KeyTransformations.cs" />
     <Compile Include="NewRecordSimulation.cs" />
     <Compile Include="Person.cs" />
