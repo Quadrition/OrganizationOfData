@@ -5,69 +5,69 @@
     [Serializable]
     public class BucketPointer : Bucket
     {
-        private BucketPointer[] synonyms;
-        private BucketPointer prev;
-        private BucketPointer next;
-        private int blankRecords;
+        private RecordPointer u;
+        private BucketPointer b;
+        private BucketPointer n;
+        private int e;
 
         public BucketPointer(int factor, int address) : base(factor, address)
         {
             
         }
 
-        public BucketPointer[] Synonyms
+        public RecordPointer U
         {
             get
             {
-                return synonyms;
+                return u;
             }
             
             set
             {
-                synonyms = value;
-                NotifyPropertyChanged(nameof(Synonyms));
+                u = value;
+                NotifyPropertyChanged(nameof(U));
             }
         }
 
-        public BucketPointer Prev
+        public BucketPointer B
         {
             get
             {
-                return prev;
+                return b;
             }
 
             set
             {
-                prev = value;
-                NotifyPropertyChanged(nameof(Prev));
+                b = value;
+                NotifyPropertyChanged(nameof(B));
             }
         }
 
-        public BucketPointer Next
+        public BucketPointer N
         {
             get
             {
-                return next;
+                return n;
             }
 
             set
             {
-                next = value;
-                NotifyPropertyChanged(nameof(Next));
+                n = value;
+                NotifyPropertyChanged(nameof(N));
             }
         }
 
-        public int BlankRecords
+        public int E
         {
             get
             {
-                return blankRecords;
+                return e;
             }
 
             set
             {
-                blankRecords = value;
-                NotifyPropertyChanged(nameof(BlankRecords));
+                e = value;
+                NotifyPropertyChanged(nameof(E));
             }
         }
     }
