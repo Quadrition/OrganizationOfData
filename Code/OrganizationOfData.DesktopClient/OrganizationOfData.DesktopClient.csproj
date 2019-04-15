@@ -86,6 +86,7 @@
     <Compile Include="ViewModels\AuthorsWindowViewModel.cs" />
     <Compile Include="ViewModels\BucketControlViewModel.cs" />
     <Compile Include="ViewModels\BucketMemoryControlViewModel.cs" />
+    <Compile Include="ViewModels\BucketPointerControlViewModel.cs" />
     <Compile Include="ViewModels\DeleteRecordDialogViewModel.cs" />
     <Compile Include="ViewModels\EditRecordDialogViewModel.cs" />
     <Compile Include="ViewModels\FindRecordDialogViewModel.cs" />
@@ -104,6 +105,9 @@
     </Compile>
     <Compile Include="Views\BucketMemoryControl.xaml.cs">
       <DependentUpon>BucketMemoryControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BucketPointerControl.xaml.cs">
+      <DependentUpon>BucketPointerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeleteRecordDialog.xaml.cs">
       <DependentUpon>DeleteRecordDialog.xaml</DependentUpon>
@@ -125,6 +129,9 @@
     </Compile>
     <Compile Include="Views\OverrunZoneControl.xaml.cs">
       <DependentUpon>OverrunZoneControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrimaryOverrunZoneControl.xaml.cs">
+      <DependentUpon>PrimaryOverrunZoneControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PrimaryZoneControl.xaml.cs">
       <DependentUpon>PrimaryZoneControl.xaml</DependentUpon>
@@ -172,6 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BucketPointerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DeleteRecordDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\OverrunZoneControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PrimaryOverrunZoneControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
