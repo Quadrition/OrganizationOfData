@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="OrganizationOfData.DesktopClient.Views.BucketPointerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OrganizationOfData.DesktopClient.Views"
+             xmlns:viewModels="clr-namespace:OrganizationOfData.DesktopClient.ViewModels"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance {x:Type viewModels:BucketControlViewModel}}"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="Transparent"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <DataTemplate x:Key="RecordControl">
+            <local:RecordControl />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Border BorderThickness="2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Margin="10" Padding="5">
+        <StackPanel Orientation="Horizontal">
+            <Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
+                <StackPanel>
+                    <Border BorderThickness="0 0 0 2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
+                        <Label Content="b" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    </Border>
+                    <Label Content="n" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                </StackPanel>
+            </Border>
+            <!--<Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
+                <StackPanel>
+                    <Label Content="Adresa" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    <Label Content="{Binding Address}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                </StackPanel>
+            </Border>-->
+            <Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
+                <StackPanel>
+                    <Label Content="e" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    <Label Content="{Binding Address}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                </StackPanel>
+            </Border>
+            <ItemsControl Padding="5 0 5 0" ItemsSource="{Binding RecordControlViewModels}" ItemTemplate="{StaticResource RecordControl}" VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
+</UserControl>
