@@ -48,9 +48,12 @@
     <Compile Include="BulkFile.cs" />
     <Compile Include="BulkFilePrimaryOverrunZone.cs" />
     <Compile Include="BulkFileWithSerialOverrunZone.cs" />
+    <Compile Include="DeleteRecordPointerSimulation.cs" />
     <Compile Include="DeleteRecordSimulation.cs" />
-    <Compile Include="FindRecordSimulation.cs" />
+    <Compile Include="EditRecordPointerSimulation.cs" />
+    <Compile Include="EditRecordSimulation.cs" />
     <Compile Include="KeyTransformations.cs" />
+    <Compile Include="NewRecordPointerSimulation.cs" />
     <Compile Include="NewRecordSimulation.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

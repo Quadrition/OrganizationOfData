@@ -65,7 +65,7 @@
             ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Accent;
         }
 
-        public void UnSelect()
+        public void ResetColor()
         {
             switch (record.Status)
             {

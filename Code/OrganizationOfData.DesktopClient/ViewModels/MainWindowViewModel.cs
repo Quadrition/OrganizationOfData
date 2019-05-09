@@ -63,6 +63,8 @@
 
         #region PrimaryPrimaryZone Members
 
+        //TODO ovde dodajes svoju zonu
+
         #endregion
 
         #endregion
@@ -136,7 +138,16 @@
             set
             {
                 bucketMemoryControlViewModel = value;
-                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(BucketMemoryControlViewModel));
+
+                if (value == null)
+                {
+                    BucketMemoryControlVisibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    BucketMemoryControlVisibility = Visibility.Visible;
+                }
             }
         }
 
@@ -382,7 +393,6 @@
         #region NewRecord Members
 
         private NewRecordSimulation newRecordSimulation;
-
         public NewRecordSimulation NewRecordSimulation
         {
             get
@@ -393,6 +403,20 @@
             {
                 newRecordSimulation = value;
                 NotifyPropertyChanged(nameof(NewRecordSimulation));
+            }
+        }
+
+        private NewRecordPointerSimulation newRecordPointerSimulation;
+        public NewRecordPointerSimulation NewRecordPointerSimulation
+        {
+            get
+            {
+                return newRecordPointerSimulation;
+            }
+            set
+            {
+                newRecordPointerSimulation = value;
+                NotifyPropertyChanged(nameof(NewRecordPointerSimulation));
             }
         }
 
@@ -412,7 +436,16 @@
 
             if (result.HasValue && result.Value)
             {
-                NewRecordSimulation = new NewRecordSimulation(bulkFile as BulkFileWithSerialOverrunZone, viewModel.Record);
+                switch (BulkFile)
+                {
+                    case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
+                        NewRecordSimulation = new NewRecordSimulation(bulkFileWithSerialOverrunZone, viewModel.Record);
+                        NextStepMessage = "Kliknite sledeći korak radi početka simulacije";
+                        break;
+                    case BulkFilePrimaryOverrunZone bulkFilePrimaryOverrunZone:
+                        NewRecordPointerSimulation = new NewRecordPointerSimulation();
+                        break;
+                }
 
                 Messages.Enqueue("Uspešno ste pokrenuli simulaciju unosa novog sloga");
             }
@@ -420,39 +453,62 @@
 
         #endregion
 
-        #region FindRecord Members
+        #region EditRecord Members
 
-        private FindRecordSimulation findRecordSimulation;
-
-        public FindRecordSimulation FindRecordSimulation
+        private EditRecordSimulation editRecordSimulation;
+        public EditRecordSimulation EditRecordSimulation
         {
             get
             {
-                return findRecordSimulation;
+                return editRecordSimulation;
             }
             set
             {
-                findRecordSimulation = value;
-                NotifyPropertyChanged(nameof(FindRecordSimulation));
+                editRecordSimulation = value;
+                NotifyPropertyChanged(nameof(EditRecordSimulation));
             }
         }
 
-        public ICommand ShowFindRecordRecordDialogCommand
+        private EditRecordPointerSimulation editRecordPointerSimulation;
+        public EditRecordPointerSimulation EditRecordPointerSimulation
         {
             get
             {
-                return new ActionCommand(p => ShowFindRecordRecordDialog(), p => CanManipulateOverRecord);
+                return editRecordPointerSimulation;
+            }
+            set
+            {
+                editRecordPointerSimulation = value;
+                NotifyPropertyChanged(nameof(EditRecordPointerSimulation));
             }
         }
 
-        private void ShowFindRecordRecordDialog()
+        public ICommand ShowEditRecordRecordDialogCommand
         {
-            var viewModel = new FindRecordDialogViewModel();
+            get
+            {
+                return new ActionCommand(p => ShowEditRecordRecordDialog(), p => CanManipulateOverRecord);
+            }
+        }
+
+        private void ShowEditRecordRecordDialog()
+        {
+            var viewModel = new EditRecordDialogViewModel();
 
             bool? result = dialogService.ShowDialog(viewModel);
 
             if (result.HasValue && result.Value)
             {
+                switch (BulkFile)
+                {
+                    case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
+                        EditRecordSimulation = new EditRecordSimulation();
+                        break;
+                    case BulkFilePrimaryOverrunZone bulkFilePrimaryOverrunZone:
+                        EditRecordPointerSimulation = new EditRecordPointerSimulation();
+                        break;
+                }
+
                 Messages.Enqueue("Uspešno ste pokrenuli simulaciju traženja sloga");
             }
         }
@@ -460,6 +516,34 @@
         #endregion
 
         #region DeleteRecord Members
+
+        private DeleteRecordSimulation deleteRecordSimulation;
+        public DeleteRecordSimulation DeleteRecordSimulation
+        {
+            get
+            {
+                return deleteRecordSimulation;
+            }
+            set
+            {
+                deleteRecordSimulation = value;
+                NotifyPropertyChanged(nameof(DeleteRecordSimulation));
+            }
+        }
+
+        private DeleteRecordPointerSimulation deleteRecordPointerSimulation;
+        public DeleteRecordPointerSimulation DeleteRecordPointerSimulation
+        {
+            get
+            {
+                return deleteRecordPointerSimulation;
+            }
+            set
+            {
+                deleteRecordPointerSimulation = value;
+                NotifyPropertyChanged(nameof(DeleteRecordPointerSimulation));
+            }
+        }
 
         public ICommand ShowDeleteRecordRecordDialogCommand
         {
@@ -477,6 +561,16 @@
 
             if (result.HasValue && result.Value)
             {
+                switch (BulkFile)
+                {
+                    case BulkFileWithSerialOverrunZone bulkFileWithSerialOverrunZone:
+                        DeleteRecordSimulation = new DeleteRecordSimulation();
+                        break;
+                    case BulkFilePrimaryOverrunZone bulkFilePrimaryOverrunZone:
+                        DeleteRecordPointerSimulation = new DeleteRecordPointerSimulation();
+                        break;
+                }
+
                 Messages.Enqueue("Uspešno ste pokrenuli simulaciju brisanja sloga");
             }
         }
@@ -487,7 +581,20 @@
         {
             get
             {
-                return BulkFile != null && NewRecordSimulation == null;
+                return BulkFile != null 
+                    && NewRecordSimulation == null && NewRecordPointerSimulation == null
+                    && EditRecordSimulation == null && EditRecordPointerSimulation == null
+                    && DeleteRecordSimulation == null && DeleteRecordPointerSimulation == null;
+            }
+        }
+
+        public bool IsManipulatingOverFile
+        {
+            get
+            {
+                return NewRecordSimulation != null || NewRecordPointerSimulation != null
+                    || EditRecordSimulation != null || EditRecordPointerSimulation != null
+                    || DeleteRecordSimulation != null || DeleteRecordPointerSimulation != null;
             }
         }
 
@@ -512,7 +619,7 @@
         {
             get
             {
-                return new ActionCommand(p => NextStep(), p => CanManipulateOverRecord);
+                return new ActionCommand(p => NextStep(), p => IsManipulatingOverFile);
             }
         }
 
@@ -520,61 +627,84 @@
         {
             if (NewRecordSimulation != null)
             {
+                bool result = NewRecordSimulation.NextStep();
+                NextStepMessage = NewRecordSimulation.Message;
 
-            }
-            else if (FindRecordSimulation != null)
-            {
-
-            }
-            bool result = NewRecordSimulation.NextStep();
-            NextStepMessage = NewRecordSimulation.Message;
-
-            if (NewRecordSimulation.Row != -1)
-            {
-                if (NewRecordSimulation.OverrunZone == false)
+                if (NewRecordSimulation.Row != -1)
                 {
-                    BucketMemoryControlViewModel = new BucketMemoryControlViewModel
+                    if (NewRecordSimulation.OverrunZone == false)
                     {
-                        BucketControlViewModel = new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
-                    };
+                        BucketMemoryControlViewModel = new BucketMemoryControlViewModel()
+                        {
+                            BucketControlViewModel = new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
+                        };
+                    }
+                    else
+                    {
+                        BucketMemoryControlViewModel = new BucketMemoryControlViewModel()
+                        {
+                            BucketControlViewModel = new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
+                        };
+                    }
                 }
                 else
                 {
-                    BucketMemoryControlViewModel = new BucketMemoryControlViewModel
-                    {
-                        BucketControlViewModel = new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row])
-                    };
+                    BucketMemoryControlViewModel = null;
                 }
+
+                if (NewRecordSimulation.Column != -1)
+                {
+                    BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Select();
+                }
+
+                if (NewRecordSimulation.IsFinished)
+                {
+                    if (NewRecordSimulation.Row != -1)
+                    {
+                        BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
+                    }
+                }
+
+                if (result == false)
+                {
+                    if (NewRecordSimulation.Row != -1)
+                    {
+                        if (NewRecordSimulation.OverrunZone == false)
+                        {
+                            PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
+                        }
+                        else
+                        {
+                            OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
+                        }
+                    }
+                    NewRecordSimulation = null;
+                    BucketMemoryControlViewModel = null;
+                }
+            }
+            else if (EditRecordSimulation != null)
+            {
+
+            }
+            else if (DeleteRecordSimulation != null)
+            {
+
+            }
+            else if (NewRecordPointerSimulation != null)
+            {
+                //TODO ovde je tvoj deo
+            }
+            else if (EditRecordPointerSimulation != null)
+            {
+                //TODO ovde je tvoj deo
+            }
+            else if (DeleteRecordPointerSimulation != null)
+            {
+                //TODO ovde je tvoj deo
             }
             else
             {
-                BucketMemoryControlViewModel = null;
-            }
-
-            if (NewRecordSimulation.Column != -1)
-            {
-                BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Select();
-            }
-
-            if (result == false)
-            {
-                if (NewRecordSimulation.Row != -1 && NewRecordSimulation.Column != -1)
-                {
-                    BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Record = NewRecordSimulation.NewRecord;
-                    BucketMemoryControlViewModel.BucketControlViewModel.RecordControlViewModels[NewRecordSimulation.Column].Select();
-                }
-                if (NewRecordSimulation.OverrunZone == false)
-                {
-                    PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Person = NewRecordSimulation.NewRecord.Person;
-                    PrimaryZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Status = Status.active;
-                }
-                else
-                {
-                    OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Person = NewRecordSimulation.NewRecord.Person;
-                    OverrunZoneControlViewModel.BucketControlViewModels[NewRecordSimulation.Row].RecordControlViewModels[NewRecordSimulation.Column].Record.Status = Status.active;
-                }
-
-                NewRecordSimulation = null;
+                throw new Exception();
             }
         }
 

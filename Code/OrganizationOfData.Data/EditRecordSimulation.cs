@@ -2,11 +2,11 @@
 {
     using OrganizationOfData.Windows;
 
-    public class NewRecordSimulation
+    public class EditRecordSimulation
     {
         private readonly BulkFileWithSerialOverrunZone bulkFile;
 
-        public Record NewRecord { get; set; }
+        public Record EditedRecord { get; set; }
 
         public bool OverrunZone { get; set; }
 
@@ -18,10 +18,10 @@
 
         public bool IsFinished { get; set; }
 
-        public NewRecordSimulation(BulkFileWithSerialOverrunZone bulkFile, Record newRecord)
+        public EditRecordSimulation(BulkFileWithSerialOverrunZone bulkFile, Record editedRecord)
         {
             this.bulkFile = bulkFile;
-            NewRecord = newRecord;
+            EditedRecord = editedRecord;
 
             OverrunZone = false;
             Row = -1;
@@ -41,7 +41,7 @@
             {
                 if (Row == -1)
                 {
-                    int index = KeyTransformations.ResidualSplitting(NewRecord.Person.Id, bulkFile.NumberOfBuckets);
+                    int index = KeyTransformations.ResidualSplitting(EditedRecord.Person.Id, bulkFile.NumberOfBuckets);
 
                     string methodName = null;
 
@@ -72,22 +72,30 @@
                     Row = -1;
                     Column = -1;
 
-                    Message = string.Format("Nema mesta u primarnoj zoni za uneti slog. Prelazimo u zonu prekoračenja. ");
+                    Message = string.Format("Slog nije pronađen u primarnoj zoni. Prelazimo u zonu prekoračenja. ");
 
                     return true;
                 }
 
                 Record record = bulkFile.PrimaryZone[Row].Records[Column];
-                Message = string.Format("Proveravamo {0}. slog u baketu.", Column + 1);
-                if (record.Status != Status.empty && NewRecord.Person.Id == record.Person.Id)
+                Message = string.Format("Proveravamo {0}. slog u baketu. " +
+                    "", Column + 1);
+                if (record.Status != Status.empty && EditedRecord.Person.Id == record.Person.Id)
                 {
-                    Message += string.Format("Trenutni slog ima isti id kao novi slog! Unos sloga prekinut! ");
-                    Column = -1;
-                    Row = -1;
+                    Message += string.Format("Našli smo slog koji treba izmeniti. ");
 
-                    IsFinished = true;
-                    Message += string.Format("Kliknite sledeći korak za upisivanje izmena u disk i završetka simulacije. ");
-                    return true;
+                    if (record.Status == Status.inactive)
+                    {
+                       
+                        Column = -1;
+                        Row = -1;
+
+                        IsFinished = true;
+                        Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
+                        return true;
+                    }
+
+                    
                 }
                 else if (record.Status != Status.empty)
                 {
@@ -137,7 +145,7 @@
 
                 Record record = bulkFile.OverrunZone[Row].Records[Column];
                 Message = string.Format("Proveravamo {0}. slog u baketu. ", Column + 1);
-                if (record.Status != Status.empty && NewRecord.Person.Id == record.Person.Id)
+                if (record.Status != Status.empty && EditedRecord.Person.Id == record.Person.Id)
                 {
                     Message += string.Format("Trenutni slog ima isti id kao novi slog! Unos sloga prekinut! ");
                     Column = -1;

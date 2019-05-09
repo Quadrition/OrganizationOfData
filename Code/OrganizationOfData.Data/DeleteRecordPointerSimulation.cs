@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizationOfData.Data
 {
-    public class FindRecordSimulation
+    public class DeleteRecordPointerSimulation
     {
     }
 }

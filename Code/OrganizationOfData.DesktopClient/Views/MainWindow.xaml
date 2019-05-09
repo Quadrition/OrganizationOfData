@@ -104,14 +104,20 @@
                 <StackPanel>
                     <GroupBox Header="Disk" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
                         <StackPanel Grid.Column="0">
-                            <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding PrimaryZoneVisibility}" />
-                            <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding OverrunZoneVisibility}" />
+                            <Grid Visibility="{Binding PrimaryZoneVisibility}">
+                                <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
+                            <Grid Visibility="{Binding OverrunZoneVisibility}">
+                                <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Grid>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
-                    <local:BucketMemoryControl DataContext="{Binding BucketMemoryControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Grid Visibility="{Binding BucketMemoryControlVisibility}">
+                        <local:BucketMemoryControl DataContext="{Binding BucketMemoryControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
                     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -122,7 +128,7 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Padding="8" FontSize="20" Text="{Binding NextStepMessage}" Grid.ColumnSpan="2"/>
+                            <TextBlock Padding="8" FontSize="20" Text="{Binding NextStepMessage}" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
                             <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Command="{Binding NextStepCommand}" HorizontalAlignment="Right" Margin="0 0 10 10" Grid.Row="1" Grid.ColumnSpan="2">
                                 Sledeći korak
                             </Button>

@@ -1,8 +1,8 @@
-﻿using OrganizationOfData.Windows;
-using System;
-
-namespace OrganizationOfData.Data
+﻿namespace OrganizationOfData.Data
 {
+    using OrganizationOfData.Windows;
+    using System;
+
     [Serializable]
     public class BulkFilePrimaryOverrunZone : BulkFile
     {
