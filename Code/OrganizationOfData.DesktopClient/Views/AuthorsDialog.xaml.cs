@@ -1,14 +1,14 @@
 ﻿namespace OrganizationOfData.DesktopClient.Views
 {
-    using OrganizationOfData.Windows;
     using System.Windows;
+    using OrganizationOfData.Windows;
 
     /// <summary>
-    /// Interaction logic for AuthorsWindow.xaml
+    /// Interaction logic for AuthorsDialog.xaml
     /// </summary>
-    public partial class AuthorsWindow : Window, IDialog
+    public partial class AuthorsDialog : Window, IDialog
     {
-        public AuthorsWindow()
+        public AuthorsDialog()
         {
             InitializeComponent();
         }

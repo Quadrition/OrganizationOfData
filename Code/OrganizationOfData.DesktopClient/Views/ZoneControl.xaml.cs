@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace OrganizationOfData.DesktopClient.Views
 {
     /// <summary>
-    /// Interaction logic for BucketMemoryControl.xaml
+    /// Interaction logic for ZoneControl.xaml
     /// </summary>
-    public partial class BucketMemoryControl : UserControl
+    public partial class ZoneControl : UserControl
     {
-        public BucketMemoryControl()
+        public ZoneControl()
         {
             InitializeComponent();
         }

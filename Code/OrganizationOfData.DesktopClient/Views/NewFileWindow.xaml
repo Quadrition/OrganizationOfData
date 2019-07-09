@@ -21,13 +21,7 @@
         Title="Nova datoteka" Height="450" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
     <Window.Resources>
         <ResourceDictionary>
-            <windows:BulkFileTypeConverter x:Key="bulkFileTypeConverter" />
             <windows:TransformationMethodConverter x:Key="transformationMethodConverter" />
-            <ObjectDataProvider x:Key="bulkFileTypes" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="windows:BulkFileType"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
             <ObjectDataProvider x:Key="transformationMethods" MethodName="GetValues" ObjectType="{x:Type system:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="windows:TransformationMethod"/>
@@ -53,7 +47,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -70,13 +63,7 @@
                 </StackPanel>
             </materialDesign:Card>
 
-            <ComboBox Grid.Row="1" ItemsSource="{Binding Source={StaticResource bulkFileTypes}}" Width="Auto" HorizontalAlignment="Center" materialDesign:HintAssist.Hint="Tip datoteke" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedItem="{Binding BulkFileType}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource bulkFileTypeConverter}}"/>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <TextBox VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" IsReadOnly="True" materialDesign:HintAssist.Hint="Tip datoteke" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="Rasuta datoteka sa serijskom zonom prekoračenja" />
 
             <TextBox Name="numberOfBucketsTextBox" Grid.Row="2" Width="150" materialDesign:HintAssist.Hint="Broj baketa" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
                 <TextBox.Text>
@@ -87,7 +74,7 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBox Name="factorTextBox" Grid.Row="3" Width="150" materialDesign:HintAssist.Hint="Faktor baketiranja" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
+            <TextBox Name="factorTextBox" Grid.Row="2" Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Faktor baketiranja" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
                 <TextBox.Text>
                     <Binding Path="BulkFile.Factor" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                         <Binding.ValidationRules>

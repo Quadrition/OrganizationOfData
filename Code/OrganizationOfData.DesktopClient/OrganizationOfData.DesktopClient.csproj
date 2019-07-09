@@ -40,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,37 +84,31 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\AuthorsWindowViewModel.cs" />
+    <Compile Include="ViewModels\AuthorsDialogViewModel.cs" />
     <Compile Include="ViewModels\BucketControlViewModel.cs" />
-    <Compile Include="ViewModels\BucketMemoryControlViewModel.cs" />
-    <Compile Include="ViewModels\BucketPointerControlViewModel.cs" />
     <Compile Include="ViewModels\DeleteRecordDialogViewModel.cs" />
     <Compile Include="ViewModels\EditRecordDialogViewModel.cs" />
+    <Compile Include="ViewModels\HelpWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NewFileWindowViewModel.cs" />
     <Compile Include="ViewModels\NewRecordDialogViewModel.cs" />
-    <Compile Include="ViewModels\OverrunZoneControlViewModel.cs" />
-    <Compile Include="ViewModels\PrimaryZoneControlViewModel.cs" />
     <Compile Include="ViewModels\RecordControlViewModel.cs" />
     <Compile Include="ViewModels\SimpleMessageDialogViewModel.cs" />
     <Compile Include="ViewModels\ZoneControlViewModel.cs" />
-    <Compile Include="Views\AuthorsWindow.xaml.cs">
-      <DependentUpon>AuthorsWindow.xaml</DependentUpon>
+    <Compile Include="Views\AuthorsDialog.xaml.cs">
+      <DependentUpon>AuthorsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\BucketControl.xaml.cs">
       <DependentUpon>BucketControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BucketMemoryControl.xaml.cs">
-      <DependentUpon>BucketMemoryControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\BucketPointerControl.xaml.cs">
-      <DependentUpon>BucketPointerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeleteRecordDialog.xaml.cs">
       <DependentUpon>DeleteRecordDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\EditRecordDialog.xaml.cs">
       <DependentUpon>EditRecordDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -124,20 +119,14 @@
     <Compile Include="Views\NewRecordDialog.xaml.cs">
       <DependentUpon>NewRecordDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OverrunZoneControl.xaml.cs">
-      <DependentUpon>OverrunZoneControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PrimaryOverrunZoneControl.xaml.cs">
-      <DependentUpon>PrimaryOverrunZoneControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PrimaryZoneControl.xaml.cs">
-      <DependentUpon>PrimaryZoneControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\RecordControl.xaml.cs">
       <DependentUpon>RecordControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SimpleMessageDialog.xaml.cs">
       <DependentUpon>SimpleMessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ZoneControl.xaml.cs">
+      <DependentUpon>ZoneControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -167,19 +156,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\AuthorsWindow.xaml">
+    <Page Include="Views\AuthorsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BucketControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\BucketMemoryControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\BucketPointerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditRecordDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -203,23 +188,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OverrunZoneControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PrimaryOverrunZoneControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PrimaryZoneControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\RecordControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SimpleMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ZoneControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -252,6 +229,36 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\mikec.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\deleterecord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\editrecord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\emptymainwindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\filemenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\helpmenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\mainwindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\newfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\newrecord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\openfile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\savefile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

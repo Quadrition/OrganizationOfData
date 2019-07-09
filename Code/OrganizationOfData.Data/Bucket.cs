@@ -9,22 +9,9 @@
     [Serializable]
     public class Bucket : Model
     {
-        protected Record[] records;
+        public Record[] Records { get; set; }
 
-        public Record[] Records
-        {
-            get
-            {
-                return records;
-            }
-            set
-            {
-                records = value;
-                NotifyPropertyChanged(nameof(Records));
-            }
-        }
-
-        protected int address;
+        private int address;
 
         public int Address
         {
@@ -39,6 +26,22 @@
             }
         }
 
+        private int overrunedRecords;
+
+        public int OverrunedRecords
+        {
+            get
+            {
+                return overrunedRecords;
+            }
+            set
+            {
+                overrunedRecords = value;
+
+                NotifyPropertyChanged(nameof(OverrunedRecords));
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of <see cref="Bucket"/>
         /// </summary>
@@ -47,6 +50,26 @@
         {
             Records = new Record[factor];
             Address = address;
+            OverrunedRecords = 0;
+        }
+
+        /// <summary>
+        /// Forms an empty bulk file along with <see cref="NumberOfBuckets"/> <see cref="Bucket"/>
+        /// and <see cref="Factor"/> records inside of each <see cref="Bucket"/>
+        /// </summary>
+        public void FormEmptyBucket()
+        {
+            Record record;
+
+            for (int j = 0; j < Records.Length; j++)
+            {
+                record = new Record()
+                {
+                    Person = new Person(),
+                    Status = Status.empty
+                };
+                Records[j] = record;
+            }
         }
     }
 }

@@ -37,6 +37,12 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
+            <Border BorderThickness="2 0 0 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0" Visibility="{Binding OverrunedRecordsVisibility}">
+                <StackPanel Visibility="{Binding OverrunedRecordsVisibility}">
+                    <Label Content="Prekoračenja" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    <Label Content="{Binding OverrunedRecords}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Border>
 </UserControl>

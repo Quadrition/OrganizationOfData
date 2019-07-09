@@ -18,7 +18,10 @@
         Background="Transparent"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Name="NewFileWindowName"
-        Title="Nova datoteka" Height="100" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+        Title="Nova datoteka" Height="150" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+    <Window.Resources>
+        <windows:InverseBooleanConverter x:Key="inverseBooleanConverter" />
+    </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="Loaded">
             <BeginStoryboard>
@@ -29,8 +32,9 @@
         </EventTrigger>
     </Window.Triggers>
     <Border BorderThickness="0" CornerRadius="10" Background="White">
-        <Grid>
+        <Grid Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -48,6 +52,13 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
+
+            <RadioButton Style="{StaticResource MaterialDesignRadioButton}" IsChecked="{Binding Logical, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                Logičko
+            </RadioButton>
+            <RadioButton Style="{StaticResource MaterialDesignRadioButton}" IsChecked="{Binding Logical, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource inverseBooleanConverter}}" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                Fizičko
+            </RadioButton>
 
             <Button Grid.Row="3" Grid.Column="0" Width="100" Command="{Binding DeleteRecordCommand}" Content="Potvrdi" HorizontalAlignment="Center">
                 <Button.Style>

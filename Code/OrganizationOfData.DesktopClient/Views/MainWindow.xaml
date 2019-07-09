@@ -18,7 +18,6 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Simulacija rasute datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" WindowState="Maximized" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
-        <windows:BulkFileTypeConverter x:Key="bulkFileTypeConverter" />
         <windows:TransformationMethodConverter x:Key="transformationMethodConverter" />
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
@@ -35,7 +34,7 @@
                 <MenuItem Header="_Zatvori" Icon="{materialDesign:PackIcon Kind=Close}" Command="{Binding CloseFileCommand}"/>
             </MenuItem>
             <MenuItem Header="_Pomoć" Icon="{materialDesign:PackIcon Kind=Help}">
-                <MenuItem Header="_Dokumentacija" Icon="{materialDesign:PackIcon Kind=FileDocumentBoxMultiple}" />
+                <MenuItem Header="_Dokumentacija" Icon="{materialDesign:PackIcon Kind=FileDocumentBoxMultiple}" Command="{Binding OpenHelpWindowsCommand}" />
                 <MenuItem Header="_Autori" Icon="{materialDesign:PackIcon Kind=ContactMail}" Command="{Binding OpenAuthorsWindowsCommand}" />
             </MenuItem>
         </Menu>
@@ -48,7 +47,7 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Add" />
                         <TextBlock Margin="10 0 0 0">
-                            Nov slog
+                            Novi slog
                         </TextBlock>
                     </StackPanel>
                 </Button>
@@ -57,22 +56,9 @@
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
                 </Separator>
-                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowFindRecordRecordDialogCommand}">
+                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowEditRecordRecordDialogCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Search" />
-                        <TextBlock Margin="10 0 0 0">
-                            Pretraži slog
-                        </TextBlock>
-                    </StackPanel>
-                </Button>
-                <Separator DockPanel.Dock="Left" Background="{DynamicResource MaterialDesignBody}" Visibility="Collapsed">
-                    <Separator.LayoutTransform>
-                        <RotateTransform Angle="90" />
-                    </Separator.LayoutTransform>
-                </Separator>
-                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowScalesCommand}" Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Edit" />
                         <TextBlock Margin="10 0 0 0">
                             Izmeni slog
                         </TextBlock>
@@ -83,7 +69,7 @@
                         <RotateTransform Angle="90" />
                     </Separator.LayoutTransform>
                 </Separator>
-                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowDeleteRecordRecordDialogCommand}">
+                <Button DockPanel.Dock="Left" Style="{StaticResource MaterialDesignToolForegroundButton}" Width="Auto" Height="Auto" Margin="10 3 10 3" Command="{Binding ShowDeleteRecordDialogCommand}">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Delete" />
                         <TextBlock Margin="10 0 0 0">
@@ -102,22 +88,37 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel>
-                    <GroupBox Header="Disk" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2">
-                        <StackPanel Grid.Column="0">
-                            <Grid Visibility="{Binding PrimaryZoneVisibility}">
-                                <local:PrimaryZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Grid>
-                            <Grid Visibility="{Binding OverrunZoneVisibility}">
-                                <local:OverrunZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                            </Grid>
+                    <GroupBox Header="Disk" Style="{DynamicResource MaterialDesignGroupBox}" Margin="5" materialDesign:ShadowAssist.ShadowDepth="Depth3" BorderThickness="2" Grid.RowSpan="2" Visibility="{Binding DiskVisibility}">
+                        <StackPanel>
+                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <StackPanel>
+                                    <TextBlock Margin="10" FontSize="20" Text="Primarna zona" Grid.ColumnSpan="2"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                                        <local:ZoneControl DataContext="{Binding PrimaryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </materialDesign:Card>
+                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <StackPanel>
+                                    <TextBlock Margin="10" FontSize="20" Text="Zona prekoračenja" Grid.ColumnSpan="2"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                                        <local:ZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </ScrollViewer>
+                                </StackPanel>
+                            </materialDesign:Card>
                         </StackPanel>
                     </GroupBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1">
-                    <Grid Visibility="{Binding BucketMemoryControlVisibility}">
-                        <local:BucketMemoryControl DataContext="{Binding BucketMemoryControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Grid>
+                    <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Visibility="{Binding MemoryVisibility}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <StackPanel>
+                            <TextBlock Margin="10" FontSize="20" Text="Memorija" Grid.ColumnSpan="2"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
+                                <local:ZoneControl DataContext="{Binding MemoryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </ScrollViewer>
+                        </StackPanel>
+                    </materialDesign:Card>
                     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -147,16 +148,16 @@
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
 
                                     <Label FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip datoteke:" VerticalAlignment="Center"  />
-                                    <Label Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFileType, Converter={StaticResource bulkFileTypeConverter}}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+                                    <Label Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="Rasuta datoteka sa serijskom zonom prekoračenja"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
                                     <Label Grid.Row="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Faktor baketiranja:" VerticalAlignment="Center" />
                                     <Label Grid.Row="1" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.NumberOfBuckets}" VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
-                                    <Label Grid.Row="2" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Broj blokova:"  VerticalAlignment="Center" />
+                                    <Label Grid.Row="2" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Broj baketa:"  VerticalAlignment="Center" />
                                     <Label Grid.Row="2" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.Factor}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
                                     <Label Grid.Row="3" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip transformacije:"  VerticalAlignment="Center" />
@@ -168,5 +169,7 @@
                 </StackPanel>
             </Grid>
         </ScrollViewer>
+
+        <materialDesign:Snackbar MessageQueue="{Binding Messages}" DockPanel.Dock="Bottom" />
     </DockPanel>
 </Window>

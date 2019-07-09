@@ -18,9 +18,10 @@
             IDialogService dialogService = new DialogService(MainWindow);
 
             dialogService.Register<NewFileWindowViewModel, NewFileWindow>();
-            dialogService.Register<AuthorsWindowViewModel, AuthorsWindow>();
+            dialogService.Register<AuthorsDialogViewModel, AuthorsDialog>();
             dialogService.Register<NewRecordDialogViewModel, NewRecordDialog>();
             dialogService.Register<DeleteRecordDialogViewModel, DeleteRecordDialog>();
+            dialogService.Register<HelpWindowViewModel, HelpWindow>();
             dialogService.Register<EditRecordDialogViewModel, EditRecordDialog>();
 
             IFileDialogService fileDialogService = new FileDialogService(MainWindow);

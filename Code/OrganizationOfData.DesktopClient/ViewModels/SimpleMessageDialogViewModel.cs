@@ -9,25 +9,27 @@
     /// </summary>
     public class SimpleMessageDialogViewModel : ViewModel, IDialogRequestClose
     {
+        /// <summary>
+        /// Gets or sets a message that needs to be shown on the dialog
+        /// </summary>
         public string Message { get; set; }
+
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
 
         /// <summary>
         /// Initializes a new instance of <see cref="SimpleMessageDialogViewModel"/>
         /// </summary>
-        /// <param name="text">Message to be shown on dialog View</param>
+        /// <param name="text">Message to be shown on the dialog view</param>
         public SimpleMessageDialogViewModel(string text)
         {
-            this.Message = text;
+            Message = text;
         }
 
-        #region Dialog Members
+        #region YesNoCommand Members
 
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
-
-        #endregion
-
-        #region YesCommand Members
-
+        /// <summary>
+        /// Gets an icommand for confirming the question message
+        /// </summary>
         public ICommand YesCommand
         {
             get
@@ -36,10 +38,9 @@
             }
         }
 
-        #endregion
-
-        #region NoCommand Members
-
+        /// <summary>
+        /// Gets an icommand for denying the question message
+        /// </summary>
         public ICommand NoCommand
         {
             get

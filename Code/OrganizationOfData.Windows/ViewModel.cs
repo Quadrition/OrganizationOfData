@@ -1,5 +1,10 @@
 ﻿namespace OrganizationOfData.Windows
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+
     /// <summary>
     /// Base class for a ViewModel in the MVVM pattern.
     /// </summary>

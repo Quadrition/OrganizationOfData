@@ -15,8 +15,10 @@
         #region BulkFileMembers
 
         private BulkFile bulkFile;
-        private BulkFileType bulkFileType;
 
+        /// <summary>
+        /// Gets or sets a new bulk file
+        /// </summary>
         public BulkFile BulkFile
         {
             get
@@ -30,42 +32,14 @@
             }
         }
 
-        public BulkFileType BulkFileType
-        {
-            get
-            {
-                return bulkFileType;
-            }
-            set
-            {
-                bulkFileType = value;
-                NotifyPropertyChanged(nameof(BulkFileType));
-
-                switch (value)
-                {
-                    case BulkFileType.withSerialOverrunZone:
-                        BulkFile = new BulkFileWithSerialOverrunZone()
-                        {
-                            Factor = 3,
-                            NumberOfBuckets = 3
-                        };
-                        break;
-                    case BulkFileType.withSerialOverrunPrimaryZone:
-                        BulkFile = new BulkFilePrimaryOverrunZone()
-                        {
-                            Factor = 3,
-                            NumberOfBuckets = 3
-                        };
-                        break;
-                }
-            }
-        }
-
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="NewFileWindowViewModel"/> class
+        /// </summary>
         public NewFileWindowViewModel()
         {
-            BulkFile = new BulkFileWithSerialOverrunZone()
+            BulkFile = new BulkFile()
             {
                 Factor = 3,
                 NumberOfBuckets = 3
@@ -74,32 +48,33 @@
 
         #region NewFileMembers
 
+        /// <summary>
+        /// Gets and icommand for creating a new file
+        /// </summary>
         public ICommand CreateNewFileCommand
         {
             get
             {
-                return new ActionCommand(p => CreateNewFile(), p => IsNewFileValid);
+                return new ActionCommand(p => CreateNewFile(), p => BulkFile.IsValid);
             }
         }
 
+        /// <summary>
+        /// Forms a new empty bulk file and closes the dialog
+        /// </summary>
         private void CreateNewFile()
         {
             BulkFile.FormEmptyBulkFile();
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
-        public bool IsNewFileValid
-        {
-            get
-            {
-                return BulkFile != null && BulkFile.IsValid();
-            }
-        }
-
         #endregion
 
         #region CancelCommandMembers
 
+        /// <summary>
+        /// Gets an icommand for canceling input of new file
+        /// </summary>
         public ICommand CancelCommand
         {
             get

@@ -1,0 +1,198 @@
+﻿<Window x:Class="OrganizationOfData.DesktopClient.Views.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:local="clr-namespace:OrganizationOfData.DesktopClient.Views"
+        xmlns:viewModels="clr-namespace:OrganizationOfData.DesktopClient.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance {x:Type viewModels:MainWindowViewModel}}"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Simulacija rasute datoteke" Height="600" Width="1200" MinHeight="100" MinWidth="800" Icon="pack://application:,,,/Resources/favicon.ico"
+        Closing="Window_Closing">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Margin="30 30 30 0" Orientation="Horizontal" VerticalAlignment="Center">
+            <materialDesign:PackIcon Kind="FileDocumentBoxMultiple" Width="50" Height="50" Margin="0 0 20 0" />
+            <TextBlock VerticalAlignment="Center" Style="{StaticResource MaterialDesignDisplay1TextBlock}">
+                Dokumentacija
+            </TextBlock>
+        </StackPanel>
+        <DockPanel Margin="30">
+            <TreeView DockPanel.Dock="Left" Margin="0 0 20 0">
+                <TreeViewItem Header="Glavni prozor" Selected="TreeViewItem_Selected" />
+                <TreeViewItem Header="Rad sa datotekama">
+                    <TreeViewItem Header="Nova datoteka" Selected="TreeViewItem_Selected_1" />
+                    <TreeViewItem Header="Učitavanje datoteke" Selected="TreeViewItem_Selected_2" />
+                    <TreeViewItem Header="Čuvanje datoteke" Selected="TreeViewItem_Selected_3" />
+                    <TreeViewItem Header="Zatvaranje datoteke" Selected="TreeViewItem_Selected_4" />
+                </TreeViewItem>
+                <TreeViewItem Header="Rad sa slogovima">
+                    <TreeViewItem Header="Unos novog sloga" Selected="TreeViewItem_Selected_5" />
+                    <TreeViewItem Header="Izmena sloga" Selected="TreeViewItem_Selected_6" />
+                    <TreeViewItem Header="Brisanje sloga" Selected="TreeViewItem_Selected_7" />
+                </TreeViewItem>
+            </TreeView>
+            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <materialDesign:Transitioner SelectedIndex="{Binding SelectedIndex}">
+                    <materialDesign:TransitionerSlide TabIndex="0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Glavni prozor ima 2 režima rada, kada je datoteka otvorena i kada nije. Inicijalno stanje prozora (kada ni jedna datoteka nije otvorena) izgleda ovako
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/emptymainwindow.png"/>
+                                <TextBlock Padding="20 0 0 0" FontSize="18" TextWrapping="Wrap">
+                                    1. Meni - Sadrži komande za rad sa datotekama i pomoć
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/filemenu.png" Stretch="None" />
+                                <TextBlock Padding="40 0 0 0" FontSize="15" TextWrapping="Wrap">
+                                    Meni "Datoteka" sadrži komande za unos nove datoteke, učitavanje postojeće, čuvanje i zatvaranje datoteke. Za više informacija o navedenim komandama, pogledajte pomoć "Rad sa datotekama".
+                                </TextBlock>
+                                <Image Margin="0 50 0 20" Source="pack://application:,,,/Resources/helpmenu.png" Stretch="None" />
+                                <TextBlock Padding="40 0 0 0" FontSize="15" TextWrapping="Wrap">
+                                    Meni "Pomoć" sadrži komande za prikazivanje dokumentacije na kojoj ste trenutno, kao i prikaz autora aplikacije.
+                                </TextBlock>
+                                <TextBlock FontSize="18" Padding="20 30 0 0" TextWrapping="Wrap">
+                                    2. Podmeni - sadrži komande za manipulaciju nad datotekom (dodavanje, izmena i brisanje sloga)
+                                </TextBlock>
+                                <TextBlock FontSize="18" Padding="20 30 0 0" TextWrapping="Wrap">
+                                    3. Sledeći korak - sadrži komandu "Sedeći korak" koji prelazi na sledeću iteraciju prilikom izvršavanja neke simulacije, kao i informacije o tekstualnom obliku šta se dešava prilikom aktiviranja "Sedeći korak"
+                                </TextBlock>
+                                <TextBlock FontSize="18" Padding="20 30 0 0" TextWrapping="Wrap">
+                                    4. Informacije - sadrži i prikazuje informacije o otvorenoj datoteci kao što su tip datoteke, faktor baketiranja, broj baketa i tip transformacije
+                                </TextBlock>
+                                <TextBlock FontSize="20" Padding="0 40 0 0" TextWrapping="Wrap">
+                                    Prilikom formiranja nove/otvaranje postojeće datoteke, pojavljuju se i komponente Disk, Primarna zona i Zone prekoračenja koje sadrže prikaz o tome šta se nalazi na disku u datoteci prilikom simulacije.
+                                    Takođe, moguće je prikazati sve informacije o slogu, klikom na njega.
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/mainwindow.png"/>
+                                <TextBlock FontSize="20" Padding="0 40 0 0" TextWrapping="Wrap">
+                                    Radi početka simulacije, potrebno je pokrenuti komande za početak simulacije koje se nalaze u podmeniju. Više o navedenim komandama, pogledajte pomoć "Rad sa datotekama".
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="1">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi formiranja nove datoteke, potrebno je pokrenuti komandu "Nova datoteka" iz glavnog menija. Prilikom aktiviranja komande, otvara se sledeći prozor
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/newfile.png" Stretch="None"/>
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Kada se otvori novi prozor, potrebno je odabradi metodu transformacije, uneti broj baketa i faktor baketiranja. 
+                                    Broj baketa i faktor baketiranja moraju biti celobrojni brojevi veći od 0, ali ne i preveliki.
+                                    Kada se unesu sve potrebne informacije, aktiviranjem komande "Potvrdi" formirate novu datoteku, i aplikacija prelazi u režim rada sa datotekom (ako prethodno nije bila). 
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: ako je bila učitana neka prethodna datoteka, ona će biti zatvorena bez sačuvanih izmena!
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="2">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi učitavanja postojeće datoteke, potrebno je pokrenuti komandu "Učitaj datoteku" iz glavnog menija. 
+                                    Prilikom aktiviranja komande, otvara se dijalog za odabir putanje i naziv datoteke. Datoteke moraju da imaju format .bf (bulk file).
+                                    Kada se izabere datoteka, aplikacija prelazi u režim rada sa datotekom (ako prethodno nije bila). 
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: ako je bila učitana neka prethodna datoteka, ona će biti zatvorena bez sačuvanih izmena!
+                                    <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/openfile.png" Stretch="None"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="3">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi čuvanja trenutno otvorene datoteke, potrebno je pokrenuti komandu "Sačuvaj datoteku" ili "Sačuvaj kao datoteku" iz glavnog menija. 
+                                    Prilikom aktiviranja komande, otvara se dijalog za odabir putanje i naziv datoteke. Datoteke moraju da imaju format .bf (bulk file).
+                                    Razlika između prethodno navedene 2 komande je kada se izabere "Sačuvaj kao datoteku", korisnik bira novu putanju na kojoj želi da sačuva datoteku, dok druga komanda čuva datoteku na prethodno sačuvanoj putanji.
+                                    Takođe, ako datoteka ni jednom nije čuvana, obe komande rade na principu odabira nove putanje.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: da bi ova komanda radila, potrebno je da je neka datoteka otvorena!
+                                    <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/openfile.png" Stretch="None"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="4">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Prilikom odabira komande za zatvaranje datoteke, trenutno otvorena datoteka se zatvara i aplikacija prelazi u slobodan režim, što znači da nije moguće pokrenuti neku simulaciju dok se ne otvori neka druga datoteka.
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="5">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi unosa novog sloga, potrebno je pokrenuti komandu "Novi slog" iz podmenija. Prilikom aktiviranja komande, otvara se sledeći prozor
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/newrecord.png" Stretch="None"/>
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Kada se otvori novi prozor, potrebno je uneti informacije o novom slogu. 
+                                    Identifikacija mora biti pozitivan ceo broj, ali ne i prevelik. Ostale informacije nisu obavezne
+                                    Kada se unesu sve potrebne informacije, aktiviranjem komande "Potvrdi" započinjete simulaciju unosa novog sloga. 
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: da bi pokrenuli simulaciju za unos novog sloga, potrebno je da je neka datoteka učitana, i da se trenutno ne pokreće ni jedna simulacija.
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="6">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi izmene sloga, potrebno je pokrenuti komandu "Izmeni slog" iz podmenija. Prilikom aktiviranja komande, otvara se sledeći prozor
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/editrecord.png" Stretch="None"/>
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Kada se otvori novi prozor, potrebno je uneti informacije koje treba izmeniti 
+                                    Identifikacija je obavezna mora biti pozitivan ceo broj, ali ne i prevelik. Ostale informacije su neobavezne - ako se ostave prazne, neće se menjati.
+                                    Kada se unesu sve potrebne informacije, aktiviranjem komande "Potvrdi" započinjete simulaciju izmene sloga. Slog sa unetim id-jem (ako postoji) dobija nove vrednosti.
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: da bi pokrenuli simulaciju za izmenu sloga, potrebno je da je neka datoteka učitana, i da se trenutno ne pokreće ni jedna simulacija.
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide TabIndex="7">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="20">
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Radi brisanja sloga, potrebno je pokrenuti komandu "Obriši slog" iz podmenija. Prilikom aktiviranja komande, otvara se sledeći prozor
+                                </TextBlock>
+                                <Image Margin="0 20 0 20" Source="pack://application:,,,/Resources/deleterecord.png" Stretch="None"/>
+                                <TextBlock FontSize="20" TextWrapping="Wrap">
+                                    Kada se otvori novi prozor, potrebno je uneti id sloga koji treba da se obriše, kao i da li treba logički ili fizički da se obriše. 
+                                    Identifikacija mora biti pozitivan ceo broj, ali ne i prevelik.
+                                    Kada se unesu sve potrebne informacije, aktiviranjem komande "Potvrdi" započinjete simulaciju unosa brisanja sloga. 
+                                    <LineBreak/>
+                                    <LineBreak/>
+                                    Napomena: da bi pokrenuli simulaciju za brisanje sloga, potrebno je da je neka datoteka učitana, i da se trenutno ne pokreće ni jedna simulacija.
+                                </TextBlock>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </materialDesign:TransitionerSlide>
+                </materialDesign:Transitioner>
+            </materialDesign:Card>
+        </DockPanel>
+    </DockPanel>
+</Window>

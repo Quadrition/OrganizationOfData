@@ -1,99 +1,142 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
-    using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
     using System;
     using System.Windows.Input;
 
+
     public class EditRecordDialogViewModel : ViewModel, IDialogRequestClose
     {
-        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+        #region EditedValues Members
 
-        #region NewValues Members
+        private int id;
 
-        private BulkFile bulkFile;
-        private BulkFileType bulkFileType;
-
-        public BulkFile BulkFile
+        /// <summary>
+        /// Gets or sets an id of record that needs to be edited
+        /// </summary>
+        public int Id
         {
             get
             {
-                return bulkFile;
+                return id;
             }
             set
             {
-                bulkFile = value;
-                NotifyPropertyChanged(nameof(BulkFile));
+                id = value;
+                NotifyPropertyChanged(nameof(Id));
             }
         }
 
-        public BulkFileType BulkFileType
+        private string newFullName;
+
+        /// <summary>
+        /// Gets or sets a new value of full name
+        /// </summary>
+        public string NewFullName
         {
             get
             {
-                return bulkFileType;
+                return newFullName;
             }
             set
             {
-                bulkFileType = value;
-                NotifyPropertyChanged(nameof(BulkFileType));
+                newFullName = value;
+                NotifyPropertyChanged(nameof(NewFullName));
+            }
+        }
 
-                switch (value)
-                {
-                    case BulkFileType.withSerialOverrunZone:
-                        BulkFile = new BulkFileWithSerialOverrunZone()
-                        {
-                            Factor = 3,
-                            NumberOfBuckets = 3
-                        };
-                        break;
-                    case BulkFileType.withSerialOverrunPrimaryZone:
-                        throw new NotImplementedException();
-                    default:
-                        throw new NotImplementedException();
-                }
+        private string newAdress;
+
+        /// <summary>
+        /// Gets or sets a new value of adress
+        /// </summary>
+        public string NewAdress
+        {
+            get
+            {
+                return newAdress;
+            }
+            set
+            {
+                newAdress = value;
+                NotifyPropertyChanged(nameof(NewAdress));
+            }
+        }
+
+        private int? newAge;
+
+        /// <summary>
+        /// Gets or sets a new value of age
+        /// </summary>
+        public int? NewAge
+        {
+            get
+            {
+                return newAge;
+            }
+            set
+            {
+                newAge = value;
+                NotifyPropertyChanged(nameof(NewAge));
             }
         }
 
         #endregion
 
+        public event EventHandler<DialogCloseRequestedEventArgs> CloseRequested;
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="EditRecordDialogViewModel"/> class
+        /// </summary>
         public EditRecordDialogViewModel()
         {
-            BulkFile = new BulkFileWithSerialOverrunZone()
-            {
-                Factor = 3,
-                NumberOfBuckets = 3
-            };
+
         }
 
-        #region NewFileMembers
+        #region EditPerson
 
-        public ICommand CreateNewFileCommand
+        /// <summary>
+        /// Gets an icommand for editiong person
+        /// </summary>
+        public ICommand EditPersonCommand
         {
             get
             {
-                return new ActionCommand(p => CreateNewFile(), p => IsNewFileValid);
+                return new ActionCommand(p => EditPerson(), p => CanEditPerson);
             }
         }
 
-        private void CreateNewFile()
+        /// <summary>
+        /// Gets a boolean value which represents if the person with new values is valid
+        /// </summary>
+        public bool CanEditPerson
         {
-            BulkFile.FormEmptyBulkFile();
+            get
+            {
+                if (Id < 1 || NewFullName.Length > 32 || NewAdress.Length > 32 || (NewAge.HasValue && (NewAge < 0 || NewAge > 100)))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Closes the dialog and returns a result which confirms a edition of the record
+        /// </summary>
+        public void EditPerson()
+        {
             CloseRequested?.Invoke(this, new DialogCloseRequestedEventArgs(true));
         }
 
-        public bool IsNewFileValid
-        {
-            get
-            {
-                return BulkFile != null && BulkFile.IsValid();
-            }
-        }
-
         #endregion
 
-        #region CancelCommandMembers
+        #region CancelCommand Members
 
+        /// <summary>
+        /// Gets an icommand for canceling an edit of the record
+        /// </summary>
         public ICommand CancelCommand
         {
             get
@@ -102,6 +145,6 @@
             }
         }
 
-        #endregion  
+        #endregion
     }
 }

@@ -1,18 +1,21 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// A base ViewModel class for zone control
     /// </summary>
-    public abstract class ZoneControlViewModel : ViewModel
+    public class ZoneControlViewModel : ViewModel
     {
-        protected BucketControlViewModel[] bucketControlViewModels;
+        private ICollection<BucketControlViewModel> bucketControlViewModels;
 
-        public BucketControlViewModel[] BucketControlViewModels
+        /// <summary>
+        /// Gets or sets a bucket controls for the zone control
+        /// </summary>
+        public ICollection<BucketControlViewModel> BucketControlViewModels
         {
             get
             {
@@ -30,16 +33,20 @@
         /// </summary>
         public ZoneControlViewModel()
         {
-
+            BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
         }
-
-        public ZoneControlViewModel(Bucket[] buckets)
+        //TODO mozda ne treba ovo
+        public ZoneControlViewModel(Bucket[] buckets, bool overrunedZoneVisibility)
         {
-            BucketControlViewModels = new BucketControlViewModel[buckets.Length];
+            BucketControlViewModels = new ObservableCollection<BucketControlViewModel>();
 
             for (int i = 0; i < buckets.Length; i++)
             {
-                BucketControlViewModels[i] = new BucketControlViewModel(buckets[i]);
+                BucketControlViewModels.Add(new BucketControlViewModel(buckets[i])
+                {
+                    OverrunedRecordsVisibility = overrunedZoneVisibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed,
+                    OverrunedRecords = buckets[i].OverrunedRecords
+                });
             }
         }
     }

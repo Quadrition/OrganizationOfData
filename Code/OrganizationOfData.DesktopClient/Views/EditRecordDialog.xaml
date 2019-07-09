@@ -46,8 +46,8 @@
             <materialDesign:Card Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueMidBrush}" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
                 <StackPanel Margin="10" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <materialDesign:PackIcon Kind="Edit" Width="50" Height="50" Margin="0 0 20 0" />
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource MaterialDesignDisplay1TextBlock}">
+                    <materialDesign:PackIcon Kind="Edit" Width="50" Height="50" Margin="0 0 20 0" Foreground="{DynamicResource MaterialDesignPaper}" />
+                    <TextBlock VerticalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" FontSize="35">
                         Izmena sloga
                     </TextBlock>
                 </StackPanel>
@@ -55,18 +55,18 @@
 
             <TextBox Grid.Row="1" Name="idTextBox" Width="150" materialDesign:HintAssist.Hint="Identifikacija" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
                 <TextBox.Text>
-                    <Binding Path="Record.Person.Id" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
+                    <Binding Path="Id" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
                         <Binding.ValidationRules>
                             <windows:IntegerValidation/>
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox.Text>
             </TextBox>
-            <TextBox Grid.Row="1" Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Ime i prezime" Text="{Binding Record.Person.FullName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" />
-            <TextBox Grid.Row="2" Width="150" materialDesign:HintAssist.Hint="Adresa" Text="{Binding Record.Person.Adress, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" />
-            <TextBox Grid.Row="2" Name="ageTextBox" Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Broj godina" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
+            <TextBox Grid.Row="1" Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Novo ime i prezime" Text="{Binding NewFullName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" />
+            <TextBox Grid.Row="2" Width="150" materialDesign:HintAssist.Hint="Nova adresa" Text="{Binding NewAdress, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center" />
+            <TextBox Grid.Row="2" Name="ageTextBox" Grid.Column="1" Width="150" materialDesign:HintAssist.Hint="Novi broj godina" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
                 <TextBox.Text>
-                    <Binding Path="Record.Person.Age" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource emptyConverter}">
+                    <Binding Path="NewAge" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource emptyConverter}">
                         <Binding.ValidationRules>
                             <windows:EmptyIntegerValidation/>
                         </Binding.ValidationRules>
@@ -74,7 +74,7 @@
                 </TextBox.Text>
             </TextBox>
 
-            <Button Grid.Row="3" Grid.Column="0" Width="100" Command="{Binding CreateNewRecordCommand}" Content="Potvrdi" HorizontalAlignment="Center">
+            <Button Grid.Row="3" Grid.Column="0" Width="100" Command="{Binding EditPersonCommand}" Content="Potvrdi" HorizontalAlignment="Center">
                 <Button.Style>
                     <Style BasedOn="{StaticResource MaterialDesignRaisedAccentButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="False"/>

@@ -6,28 +6,18 @@
     using System.Linq;
 
     /// <summary>
-    /// Represents a bulk file with primary zone
+    /// Represents a bulk file with primary and overrun zone
     /// </summary>
     [Serializable]
-    public abstract class BulkFile : Model
+    public class BulkFile : Model
     {
-        protected Bucket[] primaryZone;
+        public Bucket[] PrimaryZone { get; set; }
+        public Bucket[] OverrunZone { get; set; }
+
         protected int factor;
         protected int numberOfBuckets;
-        protected TransformationMethod transformationMethod;
 
-        public Bucket[] PrimaryZone
-        {
-            get
-            {
-                return primaryZone;
-            }
-            set
-            {
-                primaryZone = value;
-                NotifyPropertyChanged(nameof(PrimaryZone));
-            }
-        }
+        public TransformationMethod TransformationMethod { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Faktor baketiranja mora biti pozitivan")]
         public int Factor
@@ -57,19 +47,6 @@
             }
         }
 
-        public TransformationMethod TransformationMethod
-        {
-            get
-            {
-                return transformationMethod;
-            }
-            set
-            {
-                transformationMethod = value;
-                NotifyPropertyChanged(nameof(TransformationMethod));
-            }
-        }
-
         /// <summary>
         /// Initializes a new instance of <see cref="BulkFile"/> class
         /// </summary>
@@ -82,31 +59,42 @@
         /// Forms an empty bulk file along with <see cref="NumberOfBuckets"/> <see cref="Bucket"/>
         /// and <see cref="Factor"/> records inside of each <see cref="Bucket"/>
         /// </summary>
-        public abstract void FormEmptyBulkFile();
-
-        /// <summary>
-        /// Checks if property is valid
-        /// </summary>
-        /// <param name="propertyName">A property to be validated</param>
-        /// <returns>True if the property is valid, otherwise false</returns>
-        protected override string OnValidate(string propertyName)
+        public void FormEmptyBulkFile()
         {
-            return base.OnValidate(propertyName);
+            PrimaryZone = new Bucket[NumberOfBuckets];
+            OverrunZone = new Bucket[NumberOfBuckets];
+
+            Bucket bucket;
+
+            for (int i = 0; i < NumberOfBuckets; i++)
+            {
+                bucket = new Bucket(Factor, i);
+
+                bucket.FormEmptyBucket();
+                PrimaryZone[i] = bucket;
+
+                bucket = Copy.DeepCopy(bucket);
+                bucket.Address = NumberOfBuckets + i;
+                OverrunZone[i] = bucket;
+            }
         }
 
         // <summary>
         /// Checks if all entity's properties are valid
         /// </summary>
         /// <returns>True if all properties is valid, otherwise false</returns>
-        public virtual bool IsValid()
+        public virtual bool IsValid
         {
-            string[] ValidatedProperties =
+            get
+            {
+                string[] ValidatedProperties =
             {
                 "NumberOfBuckets",
                 "Factor"
             };
 
-            return ValidatedProperties.FirstOrDefault(perp => OnValidate(perp) != null) == null;
+                return ValidatedProperties.FirstOrDefault(perp => OnValidate(perp) != null) == null;
+            }
         }
     }
 }
