@@ -24,8 +24,8 @@
 
     <Border BorderThickness="2" BorderBrush="{DynamicResource SecondaryAccentBrush}" Margin="10" Padding="5">
         <StackPanel Orientation="Horizontal">
-            <Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0">
-                <StackPanel>
+            <Border BorderThickness="0 0 2 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0" Visibility="{Binding Visibility}">
+                <StackPanel Visibility="{Binding Visibility}">
                     <Label Content="Adresa" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
                     <Label Content="{Binding Address}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
                 </StackPanel>
@@ -37,8 +37,8 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-            <Border BorderThickness="2 0 0 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0" Visibility="{Binding OverrunedRecordsVisibility}">
-                <StackPanel Visibility="{Binding OverrunedRecordsVisibility}">
+            <Border BorderThickness="2 0 0 0" BorderBrush="{DynamicResource SecondaryAccentBrush}" Padding="5 0 5 0" Visibility="{Binding Visibility}">
+                <StackPanel Visibility="{Binding Visibility}">
                     <Label Content="Prekoračenja" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
                     <Label Content="{Binding OverrunedRecords}" HorizontalAlignment="Center" Foreground="{DynamicResource MaterialDesignPaper}" />
                 </StackPanel>

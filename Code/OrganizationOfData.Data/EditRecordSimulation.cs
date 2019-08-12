@@ -48,74 +48,60 @@
             }
             else
             {
-                if (Row == -1)
+                if (Row == -1 && !OverrunZone)
                 {
-                    if (!OverrunZone)
-                    {
-                        string methodName = null;
+                    string methodName = null;
 
-                        switch (BulkFile.TransformationMethod)
-                        {
-                            case TransformationMethod.centralKeyDigits:
-                                Row = KeyTransformations.CentralKeyDigits(Id, BulkFile.NumberOfBuckets);
-                                methodName = "centralnih kvadrata ključeva";
-                                break;
-                            case TransformationMethod.overlap:
-                                Row = KeyTransformations.Overlap(Id, BulkFile.NumberOfBuckets);
-                                methodName = "metodom preklapanja";
-                                break;
-                            case TransformationMethod.residualSplitting:
-                                Row = KeyTransformations.ResidualSplitting(Id, BulkFile.NumberOfBuckets);
-                                methodName = "ostataka pri deljenju";
-                                break;
-                        }
-
-                        Message = string.Format("Radimo transformaciju ključa metodom {0}. Dobijamo adresu baketa: {1}. Učitavamo taj baket. ", methodName, Row);
-                    }
-                    else
+                    switch (BulkFile.TransformationMethod)
                     {
-                        Row = 0;
-                        Message = string.Format("Učitavamo baket sa adresom {0}. ", BulkFile.OverrunZone[Row].Address);
+                        case TransformationMethod.centralKeyDigits:
+                            Row = KeyTransformations.CentralKeyDigits(Id, BulkFile.NumberOfBuckets);
+                            methodName = "centralnih kvadrata ključeva";
+                            break;
+                        case TransformationMethod.overlap:
+                            Row = KeyTransformations.Overlap(Id, BulkFile.NumberOfBuckets);
+                            methodName = "metodom preklapanja";
+                            break;
+                        case TransformationMethod.residualSplitting:
+                            Row = KeyTransformations.ResidualSplitting(Id, BulkFile.NumberOfBuckets);
+                            methodName = "ostataka pri deljenju";
+                            break;
                     }
+
+                    Message = string.Format("Radimo transformaciju ključa metodom {0}. Dobijamo adresu baketa: {1}. Učitavamo taj baket. ", methodName, Row);
                 }
                 else
                 {
                     Column++;
 
-                    if (Column >= BulkFile.Factor)
+                    if (Column >= BulkFile.Factor && !OverrunZone)
                     {
-                        if (!OverrunZone)
-                        {
-                            OverrunZone = true;
-                            Row = -1;
-                            Column = -1;
+                        OverrunZone = true;
+                        Column = -1;
 
-                            Message = string.Format("Zona prekoračenja je zauzeta. Prelazimo u zonu prekoračenja! ");
-                        }
-                        else
-                        {
-                            Message = "Došli smo do kraja trenutnog baketa. ";
-                            Row++;
+                        Message += string.Format("Ne postoji slog u primarnoj zoni" +
+                            ". Prelazimo u zonu prekoračenja! ");
+                    }
+                    else if (Column >= BulkFile.NumberOfRecordsInOverrunZone && OverrunZone)
+                    {
+                        Message += "Došli smo do kraja zone prekoračenja. Ne postoji slog sa unetim id-jem u datoteci! ";
+                        Column = -1;
 
-                            if (Row >= this.BulkFile.NumberOfBuckets)
-                            {
-                                Message = "Došli smo do kraja zone prekoračenja. Nema mesta za dodavanje novog sloga u datoteku! ";
-                                Row = -1;
-
-                                IsFinished = true;
-                                Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
-                            }
-                            else
-                            {
-                                Message += string.Format("Prelazimo na baket sa adresom: {0}. ", BulkFile.OverrunZone[Row].Address);
-                                Column = -1;
-                            }
-                        }
+                        IsFinished = true;
+                        Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
                     }
                     else
                     {
-                        Record record = !OverrunZone ? BulkFile.PrimaryZone[Row].Records[Column] : BulkFile.OverrunZone[Row].Records[Column];
-                        Message = string.Format("Proveravamo {0}. slog u baketu. ", Column + 1);
+                        Record record = !OverrunZone ? BulkFile.PrimaryZone[Row].Records[Column] : BulkFile.OverrunZone[Column];
+                        if (!OverrunZone)
+                            Message += string.Format("Proveravamo {0}. slog u primarnoj zoni. ", Column + 1);
+                        else
+                        {
+                            if (record.Status == Status.empty)
+                                Message += string.Format("Došli smo do slobodnog mesta u zoni prekoračenja. ", Column + 1);
+                            else
+                                Message += string.Format("Proveravamo {0}. slog u zoni prekoračenja. ", Column + 1);
+                        }
                         if (record.Status != Status.empty && Id == record.Person.Id)
                         {
                             Message += string.Format("Našli smo slog koji treba izmeniti. Izmenjujemo slog. ");
@@ -125,21 +111,21 @@
                                 if (!OverrunZone)
                                     BulkFile.PrimaryZone[Row].Records[Column].Person.FullName = NewFullName;
                                 else
-                                    BulkFile.OverrunZone[Row].Records[Column].Person.FullName = NewFullName;
+                                    BulkFile.OverrunZone[Column].Person.FullName = NewFullName;
                             }
                             if (NewAddress != null)
                             {
                                 if (!OverrunZone)
                                     BulkFile.PrimaryZone[Row].Records[Column].Person.Adress = NewAddress;
                                 else
-                                    BulkFile.OverrunZone[Row].Records[Column].Person.Adress = NewAddress;
+                                    BulkFile.OverrunZone[Column].Person.Adress = NewAddress;
                             }
                             if (NewAge != null)
                             {
                                 if (!OverrunZone)
                                     BulkFile.PrimaryZone[Row].Records[Column].Person.Age = NewAge;
                                 else
-                                    BulkFile.OverrunZone[Row].Records[Column].Person.Age = NewAge;
+                                    BulkFile.OverrunZone[Column].Person.Age = NewAge;
                             }
                             IsFinished = true;
                             Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
@@ -150,7 +136,8 @@
                         }
                         else
                         {
-                            Message += string.Format("Trenutni slog je prazan. Ne postoji slog sa unetim id-jem u datoteci. ");
+                            Message += string.Format("Ne postoji slog sa unetim id-jem u datoteci. ");
+                            Column = -1;
 
                             IsFinished = true;
                             Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");

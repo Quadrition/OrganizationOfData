@@ -16,11 +16,14 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Simulacija rasute datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="1200" WindowState="Maximized" Icon="pack://application:,,,/Resources/favicon.ico">
+        Title="Simulacija rasute datoteke" Height="700" Width="1200" MinHeight="700" MinWidth="10" WindowState="Maximized" Icon="pack://application:,,,/Resources/favicon.ico">
     <Window.Resources>
         <windows:TransformationMethodConverter x:Key="transformationMethodConverter" />
         <DataTemplate x:Key="BucketControl">
             <local:BucketControl />
+        </DataTemplate>
+        <DataTemplate x:Key="RecordControl">
+            <local:RecordControl />
         </DataTemplate>
     </Window.Resources>
     <DockPanel LastChildFill="True">
@@ -38,8 +41,6 @@
                 <MenuItem Header="_Autori" Icon="{materialDesign:PackIcon Kind=ContactMail}" Command="{Binding OpenAuthorsWindowsCommand}" />
             </MenuItem>
         </Menu>
-
-        <!--<Image Grid.Column="1" Grid.Row="0" Grid.RowSpan="1" Source="pack://application:,,,/Resources/ftn.png" Margin="5" />-->
 
         <materialDesign:ColorZone Mode="PrimaryMid" Padding="5" DockPanel.Dock="Top" Margin="10 5 10 10" materialDesign:ShadowAssist.ShadowDepth="Depth2">
             <DockPanel LastChildFill="False">
@@ -98,12 +99,16 @@
                                     </ScrollViewer>
                                 </StackPanel>
                             </materialDesign:Card>
-                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Visibility="{Binding OverrunZoneVisibility}" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                 <StackPanel>
                                     <TextBlock Margin="10" FontSize="20" Text="Zona prekoračenja" Grid.ColumnSpan="2"/>
-                                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
-                                        <local:ZoneControl DataContext="{Binding OverrunZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </ScrollViewer>
+                                    <ItemsControl Margin="20" Padding="5 0 5 0" ItemsSource="{Binding OverrunZoneRecordControls}" ItemTemplate="{StaticResource RecordControl}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel HorizontalAlignment="Center"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
                                 </StackPanel>
                             </materialDesign:Card>
                         </StackPanel>
@@ -114,9 +119,16 @@
                     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Visibility="{Binding MemoryVisibility}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <StackPanel>
                             <TextBlock Margin="10" FontSize="20" Text="Memorija" Grid.ColumnSpan="2"/>
-                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto">
-                                <local:ZoneControl DataContext="{Binding MemoryZoneControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" Visibility="{Binding MemoryBucketVisibility}">
+                                <local:BucketControl DataContext="{Binding MemoryBucketControlViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </ScrollViewer>
+                            <ItemsControl Margin="20" Padding="5 0 5 0" ItemsSource="{Binding MemoryRecordControls}" ItemTemplate="{StaticResource RecordControl}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
                         </StackPanel>
                     </materialDesign:Card>
                     <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth3" Background="{DynamicResource PrimaryHueDarkBrush}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" Margin="5" Grid.Row="0" Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -145,6 +157,7 @@
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -160,8 +173,11 @@
                                     <Label Grid.Row="2" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Broj baketa:"  VerticalAlignment="Center" />
                                     <Label Grid.Row="2" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.Factor}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
 
-                                    <Label Grid.Row="3" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip transformacije:"  VerticalAlignment="Center" />
-                                    <Label Grid.Row="3" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.TransformationMethod, Converter={StaticResource transformationMethodConverter}}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+                                    <Label Grid.Row="3" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Broj slogova u zoni prekoračenja:"  VerticalAlignment="Center" />
+                                    <Label Grid.Row="3" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.NumberOfRecordsInOverrunZone}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
+
+                                    <Label Grid.Row="4" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" FontWeight="Bold" Content="Tip transformacije:"  VerticalAlignment="Center" />
+                                    <Label Grid.Row="4" Grid.Column="1" FontFamily="{DynamicResource MaterialDesignFont}" Foreground="{DynamicResource MaterialDesignPaper}" Content="{Binding BulkFile.TransformationMethod, Converter={StaticResource transformationMethodConverter}}"  VerticalAlignment="Center" Grid.ColumnSpan="2" />
                                 </Grid>
                             </DockPanel>
                         </Border>

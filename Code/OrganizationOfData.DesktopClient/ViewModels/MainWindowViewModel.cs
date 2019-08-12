@@ -7,6 +7,8 @@
     using System;
     using MaterialDesignThemes.Wpf;
     using System.Linq;
+    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
 
     /// <summary>
     /// ViewModel containing all functionalities for MainWindow View
@@ -61,22 +63,27 @@
             }
         }
 
-        private ZoneControlViewModel overrunZoneControlViewModel;
+        /// <summary>
+        /// Gets or sets a list of records in overrun zone
+        /// </summary>
+        public ICollection<RecordControlViewModel> OverrunZoneRecordControls { get; set; }
+
+        private Visibility overrunZoneVisibility;
 
         /// <summary>
-        /// Gets or sets the view model for the overrun zone control
+        /// Gets or sets visibility for the disk group
         /// </summary>
-        public ZoneControlViewModel OverrunZoneControlViewModel
+        public Visibility OverrunZoneVisibility
         {
             get
             {
-                return overrunZoneControlViewModel;
+                return overrunZoneVisibility;
             }
             set
             {
-                overrunZoneControlViewModel = value;
+                overrunZoneVisibility = value;
 
-                NotifyPropertyChanged(nameof(OverrunZoneControlViewModel));
+                NotifyPropertyChanged(nameof(OverrunZoneVisibility));
             }
         }
 
@@ -102,24 +109,44 @@
             }
         }
 
-        private ZoneControlViewModel memoryZoneControlViewModel;
+        private BucketControlViewModel memoryBucketControlViewModel;
 
         /// <summary>
         /// Gets or sets the view model for the primary zone control
         /// </summary>
-        public ZoneControlViewModel MemoryZoneControlViewModel
+        public BucketControlViewModel MemoryBucketControlViewModel
         {
             get
             {
-                return memoryZoneControlViewModel;
+                return memoryBucketControlViewModel;
             }
             set
             {
-                memoryZoneControlViewModel = value;
+                memoryBucketControlViewModel = value;
 
-                NotifyPropertyChanged(nameof(MemoryZoneControlViewModel));
+                NotifyPropertyChanged(nameof(MemoryBucketControlViewModel));
             }
         }
+
+        private Visibility memoryBucketVisibility;
+
+        public Visibility MemoryBucketVisibility
+        {
+            get
+            {
+                return memoryBucketVisibility;
+            }
+            set
+            {
+                memoryBucketVisibility = value;
+                NotifyPropertyChanged(nameof(MemoryBucketVisibility));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a list of records in memory
+        /// </summary>
+        public ICollection<RecordControlViewModel> MemoryRecordControls { get; set; }
 
         #endregion
 
@@ -141,18 +168,36 @@
                 bulkFile = value;
                 NotifyPropertyChanged(nameof(BulkFile));
 
+                OverrunZoneRecordControls.Clear();
                 if (value == null)
                 {
                     DiskVisibility = Visibility.Collapsed;
+                    OverrunZoneVisibility = Visibility.Collapsed;
                     PrimaryZoneControlViewModel = null;
-                    OverrunZoneControlViewModel = null;
                 }
                 else
                 {
                     DiskVisibility = Visibility.Visible;
 
                     PrimaryZoneControlViewModel = new ZoneControlViewModel(bulkFile.PrimaryZone, true);
-                    OverrunZoneControlViewModel = new ZoneControlViewModel(bulkFile.OverrunZone, false);
+                    
+                    foreach (Record record in bulkFile.OverrunZone)
+                    {
+                        OverrunZoneRecordControls.Add(new RecordControlViewModel()
+                        {
+                            Record = record,
+                            Visibility = record.Status == Status.empty ? Visibility.Collapsed : Visibility.Visible
+                        });
+                    }
+
+                    if (bulkFile.OverrunZone[0].Status == Status.empty)
+                    {
+                        OverrunZoneVisibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        OverrunZoneVisibility = Visibility.Visible;
+                    }
                 }
             }
         }
@@ -187,9 +232,14 @@
             this.fileDialogService = fileDialogService;
           
             DiskVisibility = Visibility.Collapsed;
+            OverrunZoneVisibility = Visibility.Collapsed;
             MemoryVisibility = Visibility.Collapsed;
+            MemoryBucketVisibility = Visibility.Collapsed;
 
             Messages = new SnackbarMessageQueue();
+
+            OverrunZoneRecordControls = new ObservableCollection<RecordControlViewModel>();
+            MemoryRecordControls = new ObservableCollection<RecordControlViewModel>();
         }
 
         #region NewFile Members
@@ -588,49 +638,52 @@
                 bool result = NewRecordSimulation.NextStep();
                 NextStepMessage = NewRecordSimulation.Message;
 
-                if (NewRecordSimulation.Row != -1)
+                MemoryRecordControls.Clear();
+                MemoryVisibility = Visibility.Visible;
+                MemoryBucketControlViewModel = null;
+                MemoryBucketVisibility = Visibility.Visible;
+                if (NewRecordSimulation.KeyTransformation != -1 && !NewRecordSimulation.OverrunZone)
                 {
-                    MemoryZoneControlViewModel = new ZoneControlViewModel();
-                    MemoryVisibility = Visibility.Visible;
-                    if (NewRecordSimulation.OverrunZone == false)
-                    {
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.Row)));
-                    }
-                    else
-                    {
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.Row)));
-                    }
+                    MemoryBucketControlViewModel = new BucketControlViewModel(BulkFile.PrimaryZone[NewRecordSimulation.KeyTransformation]);
 
                     if (NewRecordSimulation.Column != -1)
                     {
-                        MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(NewRecordSimulation.Column).Select();
+                        MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(NewRecordSimulation.Column).Select();
                     }
+                }
+                else if (NewRecordSimulation.Column != -1)
+                {
+                    MemoryRecordControls.Add(new RecordControlViewModel()
+                    {
+                        Record = BulkFile.OverrunZone[NewRecordSimulation.Column]
+                    });
+
+                    MemoryBucketVisibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    MemoryZoneControlViewModel = null;
                     MemoryVisibility = Visibility.Collapsed;
                 }
 
                 if (NewRecordSimulation.Changed)
                 {
-                    //MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(NewRecordSimulation.Column).ResetColor();
-
                     if (!NewRecordSimulation.OverrunZone)
                     {
-                        PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.Row).RecordControlViewModels.ElementAt(NewRecordSimulation.Column).ResetColor();
+                        PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(NewRecordSimulation.Column).ResetColor();
                     }
                     else
                     {
                         PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.KeyTransformation).OverrunedRecords++;
-                        OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(NewRecordSimulation.Row).RecordControlViewModels.ElementAt(NewRecordSimulation.Column).ResetColor();
+                        OverrunZoneRecordControls.ElementAt(NewRecordSimulation.Column).ResetColor();
+                        OverrunZoneRecordControls.ElementAt(NewRecordSimulation.Column).Visibility = Visibility.Visible;
+                        OverrunZoneVisibility = Visibility.Visible;
                     }
                 }
 
                 if (result == false)
                 {
                     NewRecordSimulation = null;
-                    MemoryZoneControlViewModel = null;
+                    MemoryRecordControls.Clear();
                     MemoryVisibility = Visibility.Collapsed;
                 }
             }
@@ -639,34 +692,37 @@
                 bool result = EditRecordSimulation.NextStep();
                 NextStepMessage = EditRecordSimulation.Message;
 
-                if (EditRecordSimulation.Row != -1)
+                MemoryRecordControls.Clear();
+                MemoryVisibility = Visibility.Visible;
+                MemoryBucketControlViewModel = null;
+                MemoryBucketVisibility = Visibility.Visible;
+                if (EditRecordSimulation.Row != -1 && !EditRecordSimulation.OverrunZone)
                 {
-                    MemoryZoneControlViewModel = new ZoneControlViewModel();
-                    MemoryVisibility = Visibility.Visible;
-                    if (EditRecordSimulation.OverrunZone == false)
-                    {
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(EditRecordSimulation.Row)));
-                    }
-                    else
-                    {
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(EditRecordSimulation.Row)));
-                    }
+                    MemoryBucketControlViewModel = new BucketControlViewModel(BulkFile.PrimaryZone[EditRecordSimulation.Row]);
 
                     if (EditRecordSimulation.Column != -1)
                     {
-                        MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(EditRecordSimulation.Column).Select();
+                        MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(EditRecordSimulation.Column).Select();
                     }
+                }
+                else if (EditRecordSimulation.Column != -1)
+                {
+                    MemoryRecordControls.Add(new RecordControlViewModel()
+                    {
+                        Record = BulkFile.OverrunZone[EditRecordSimulation.Column]
+                    });
+
+                    MemoryBucketVisibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    MemoryZoneControlViewModel = null;
                     MemoryVisibility = Visibility.Collapsed;
                 }
 
                 if (result == false)
                 {
                     EditRecordSimulation = null;
-                    MemoryZoneControlViewModel = null;
+                    MemoryRecordControls.Clear();
                     MemoryVisibility = Visibility.Collapsed;
                 }
             }
@@ -676,124 +732,167 @@
                 bool oldDeleted = DeleteRecordSimulation.Deleted;
                 bool result = DeleteRecordSimulation.NextStep();
                 NextStepMessage = DeleteRecordSimulation.Message;
+                
+                MemoryVisibility = Visibility.Visible;
+                MemoryBucketVisibility = Visibility.Visible;
+                MemoryRecordControls.Clear();
 
-                if (DeleteRecordSimulation.Row != -1)
+                if (DeleteRecordSimulation.KeyTransformation != -1)
                 {
-                    MemoryZoneControlViewModel = new ZoneControlViewModel();
-                    MemoryVisibility = Visibility.Visible;
-
-                    if (DeleteRecordSimulation.OverrunZone == false)
+                    if (!DeleteRecordSimulation.OverrunZone)
                     {
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row)));
+                        MemoryBucketControlViewModel = new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation));
                     }
                     else
                     {
-                        if (DeleteRecordSimulation.Deleted)
+                        if (DeleteRecordSimulation.DeletedInPrimary || oldDeletedInPrimary != DeleteRecordSimulation.DeletedInPrimary)
                         {
-                            if (DeleteRecordSimulation.DeletedInPrimary || oldDeletedInPrimary != DeleteRecordSimulation.DeletedInPrimary)
+                            MemoryBucketControlViewModel = new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation));
+                            if (DeleteRecordSimulation.Column != -1)
                             {
-                                MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation)));
-                            }
-                            else if (DeleteRecordSimulation.Column == 0)
-                            {
-                                if (DeleteRecordSimulation.Row == 0)
+                                MemoryRecordControls.Add(new RecordControlViewModel()
                                 {
-                                    throw new Exception("ovo je onaj kurac"); //TODO obrisi ovo
-                                }
-                                MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row - 1)));
+                                    Record = OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).Record,
+                                });
                             }
                         }
-
-                        MemoryZoneControlViewModel.BucketControlViewModels.Add(new BucketControlViewModel(OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row)));
-                    }
-
-                    if (DeleteRecordSimulation.Column != -1)
-                    {
-                        if (MemoryZoneControlViewModel.BucketControlViewModels.Count == 1)
+                        else if (DeleteRecordSimulation.DeletedInOverrun)
                         {
-                            MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).Select();
-
-                            if (DeleteRecordSimulation.Deleted && oldDeleted == DeleteRecordSimulation.Deleted)
+                            if (DeleteRecordSimulation.Column != -1 && DeleteRecordSimulation.Column != BulkFile.NumberOfRecordsInOverrunZone)
                             {
-                                if (!(DeleteRecordSimulation.DeletedInPrimary && DeleteRecordSimulation.IsFinished))
+                                MemoryRecordControls.Add(new RecordControlViewModel()
                                 {
-                                    MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).Select();
+                                    Record = OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).Record,
+                                });
+
+                                if (!oldDeletedInPrimary && oldDeleted == DeleteRecordSimulation.Deleted)
+                                {
+                                    MemoryRecordControls.Add(new RecordControlViewModel()
+                                    {
+                                        Record = OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Record,
+                                    });
                                 }
+
+                                MemoryBucketVisibility = Visibility.Collapsed;
+                                MemoryBucketControlViewModel = null;
                             }
                         }
                         else
                         {
-                            MemoryZoneControlViewModel.BucketControlViewModels.ElementAt(1).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).Select();
-
-                            if (oldDeleted == DeleteRecordSimulation.Deleted)
+                            if (DeleteRecordSimulation.Column != -1)
                             {
-                                MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(BulkFile.Factor - 1).Select();
+                                MemoryRecordControls.Add(new RecordControlViewModel()
+                                {
+                                    Record = OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).Record,
+                                });
                             }
+                            MemoryBucketVisibility = Visibility.Collapsed;
+                            MemoryBucketControlViewModel = null;
                         }
                     }
-                }
-                else
-                {
-                    MemoryZoneControlViewModel = null;
-                    MemoryVisibility = Visibility.Collapsed;
+
+                    if (MemoryBucketControlViewModel != null)
+                    {
+                        if (!DeleteRecordSimulation.OverrunZone)
+                        {
+                            if (!DeleteRecordSimulation.Deleted || oldDeleted != DeleteRecordSimulation.Deleted)
+                            {
+                                if (DeleteRecordSimulation.Column != -1)
+                                    MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).Select();
+                            }
+                            else if (oldDeleted == DeleteRecordSimulation.Deleted)
+                            {
+                                MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).Select();
+                                MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).Select();
+                            }
+                        }
+                        else
+                        {
+                            MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(BulkFile.Factor - 1).Select();
+                        }
+                    }
+                    else if (DeleteRecordSimulation.DeletedInPrimary)
+                    {
+                        MemoryBucketControlViewModel.RecordControlViewModels.ElementAt(BulkFile.Factor - 1).Select();
+                    }
+
+                    foreach (RecordControlViewModel record in MemoryRecordControls)
+                    {
+                        record.Select();
+                    }
                 }
                 
                 if (DeleteRecordSimulation.Changed)
                 {
                     //MemoryZoneControlViewModel.BucketControlViewModels.First().RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
-                    if (!DeleteRecordSimulation.Deleted)
+                    if (!DeleteRecordSimulation.OverrunZone)
                     {
-                        if (!DeleteRecordSimulation.OverrunZone)
+                        if (DeleteRecordSimulation.Logical)
                         {
-                            PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
+                            PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
                         }
                         else
                         {
-                            OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
+                            if (oldDeleted != DeleteRecordSimulation.Deleted)
+                            {
+                                PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
+                            }
+                            else
+                            {
+                                PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                            }
                         }
                     }
                     else
                     {
-                        if (!DeleteRecordSimulation.OverrunZone)
+                        if (MemoryBucketControlViewModel != null)
                         {
-                            if (DeleteRecordSimulation.DeletedInPrimary && DeleteRecordSimulation.IsFinished)
-                            {
-                                PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
-                            }
-                            else
-                            {
-                                if (DeleteRecordSimulation.Column == 0)
-                                    PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
-                                else
-                                    PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
-                            }
+                            PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(BulkFile.Factor - 1).ResetColor();
                         }
                         else
                         {
-                            if (MemoryZoneControlViewModel.BucketControlViewModels.Count == 1)
+                            if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone && DeleteRecordSimulation.Deleted)
                             {
-                                OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Hidden;
+
+                                if (OverrunZoneRecordControls.Count == 0)
+                                {
+                                    OverrunZoneVisibility = Visibility.Hidden;
+                                }
                             }
                             else
                             {
-                                if (oldDeletedInPrimary)
+                                if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone)
                                 {
-                                    PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(BulkFile.Factor - 1).ResetColor();
+                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).ResetColor();
                                 }
-                                else
+
+                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                                MemoryBucketVisibility = Visibility.Collapsed;
+
+                                if (OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Record.Status == Status.empty)
                                 {
-                                    OverrunZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.Row - 1).RecordControlViewModels.ElementAt(BulkFile.Factor - 1).ResetColor();
+                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Collapsed;
+                                    MemoryVisibility = Visibility.Collapsed;
                                 }
                             }
                         }
                     }
                 }
-                
+
+                if (MemoryBucketControlViewModel == null)
+                    MemoryBucketVisibility = Visibility.Collapsed;
+
                 if (result == false)
                 {
-                    DeleteRecordSimulation = null;
-                    MemoryZoneControlViewModel = null;
+                    if (!result)
+                        DeleteRecordSimulation = null;
+
+                    MemoryBucketControlViewModel = null;
+                    MemoryBucketVisibility = Visibility.Collapsed;
                     MemoryVisibility = Visibility.Collapsed;
+                    MemoryRecordControls.Clear();
 
                     for (int i = 0; i < BulkFile.NumberOfBuckets; i++)
                     {
@@ -805,10 +904,11 @@
             {
                 throw new Exception();
             }
+
+            #endregion
+
+            #endregion
+
         }
-
-        #endregion
-
-        #endregion
     }
 }

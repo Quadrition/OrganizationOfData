@@ -12,10 +12,9 @@
     public class BulkFile : Model
     {
         public Bucket[] PrimaryZone { get; set; }
-        public Bucket[] OverrunZone { get; set; }
+        public Record[] OverrunZone { get; set; }
 
-        protected int factor;
-        protected int numberOfBuckets;
+        private int factor;
 
         public TransformationMethod TransformationMethod { get; set; }
 
@@ -33,6 +32,8 @@
             }
         }
 
+        private int numberOfBuckets;
+
         [Range(1, int.MaxValue, ErrorMessage = "Broj baketa mora biti pozitivan")]
         public int NumberOfBuckets
         {
@@ -44,6 +45,26 @@
             {
                 numberOfBuckets = value;
                 NotifyPropertyChanged(nameof(NumberOfBuckets));
+            }
+        }
+
+        private int numberOfRecordsInOverrunZone;
+
+        /// <summary>
+        /// Gets or sets number of records in overrun zone
+        /// </summary>
+        [Range(1, int.MaxValue, ErrorMessage = "Broj slogova mora biti pozitivan")]
+        public int NumberOfRecordsInOverrunZone
+        {
+            get
+            {
+                return numberOfRecordsInOverrunZone;
+            }
+            set
+            {
+                numberOfRecordsInOverrunZone = value;
+
+                NotifyPropertyChanged(nameof(NumberOfRecordsInOverrunZone));
             }
         }
 
@@ -62,7 +83,7 @@
         public void FormEmptyBulkFile()
         {
             PrimaryZone = new Bucket[NumberOfBuckets];
-            OverrunZone = new Bucket[NumberOfBuckets];
+            OverrunZone = new Record[NumberOfRecordsInOverrunZone];
 
             Bucket bucket;
 
@@ -72,10 +93,15 @@
 
                 bucket.FormEmptyBucket();
                 PrimaryZone[i] = bucket;
+            }
 
-                bucket = Copy.DeepCopy(bucket);
-                bucket.Address = NumberOfBuckets + i;
-                OverrunZone[i] = bucket;
+            for (int i = 0; i < NumberOfRecordsInOverrunZone; i++)
+            {
+                OverrunZone[i] = new Record()
+                {
+                    Person = new Person(),
+                    Status = Status.empty
+                };
             }
         }
 

@@ -66,19 +66,22 @@
             }
         }
 
-        private Visibility overrunedRecordsVisibility;
+        private Visibility visibility;
 
-        public Visibility OverrunedRecordsVisibility
+        /// <summary>
+        /// Gets or sets a visibility of overruned records and address
+        /// </summary>
+        public Visibility Visibility
         {
             get
             {
-                return overrunedRecordsVisibility;
+                return visibility;
             }
             set
             {
-                overrunedRecordsVisibility = value;
+                visibility = value;
 
-                NotifyPropertyChanged(nameof(OverrunedRecordsVisibility));
+                NotifyPropertyChanged(nameof(Visibility));
             }
         }
 
@@ -90,7 +93,7 @@
             Address = address;
             RecordControlViewModels = new ObservableCollection<RecordControlViewModel>();
             OverrunedRecords = 0;
-            OverrunedRecordsVisibility = Visibility.Visible;
+            Visibility = Visibility.Visible;
         }
 
         /// <summary>
@@ -110,7 +113,7 @@
 
         public BucketControlViewModel(BucketControlViewModel bucketControlViewModel) : this(bucketControlViewModel.Address)
         {
-            OverrunedRecordsVisibility = bucketControlViewModel.OverrunedRecordsVisibility;
+            Visibility = bucketControlViewModel.Visibility;
             OverrunedRecords = bucketControlViewModel.OverrunedRecords;
 
             foreach (RecordControlViewModel recordControl in bucketControlViewModel.RecordControlViewModels)

@@ -42,7 +42,8 @@
             BulkFile = new BulkFile()
             {
                 Factor = 3,
-                NumberOfBuckets = 3
+                NumberOfBuckets = 3,
+                NumberOfRecordsInOverrunZone = 5
             };
         }
 

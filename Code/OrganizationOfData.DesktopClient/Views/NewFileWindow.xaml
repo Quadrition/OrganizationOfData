@@ -47,6 +47,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -83,6 +84,15 @@
                     </Binding>
                 </TextBox.Text>
             </TextBox>
+            <TextBox Name="numberOfRecords" Grid.Row="3" Width="150" materialDesign:HintAssist.Hint="Broj slogova u zoni prekoračenja" Style="{StaticResource MaterialDesignFloatingHintTextBox}" VerticalAlignment="Center">
+                <TextBox.Text>
+                    <Binding Path="BulkFile.NumberOfRecordsInOverrunZone" ValidatesOnDataErrors="True" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                        <Binding.ValidationRules>
+                            <windows:IntegerValidation/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
 
             <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Source={StaticResource transformationMethods}}" Width="225" materialDesign:HintAssist.Hint="Metoda transformacije" Style="{StaticResource MaterialDesignFloatingHintComboBox}" SelectedItem="{Binding BulkFile.TransformationMethod}">
                 <ComboBox.ItemTemplate>
@@ -101,6 +111,7 @@
                                 <MultiDataTrigger.Conditions>
                                     <Condition Binding="{Binding Path=(Validation.HasError), ElementName=numberOfBucketsTextBox}" Value="False"/>
                                     <Condition Binding="{Binding Path=(Validation.HasError), ElementName=factorTextBox}" Value="False"/>
+                                    <Condition Binding="{Binding Path=(Validation.HasError), ElementName=numberOfRecords}" Value="False"/>
                                 </MultiDataTrigger.Conditions>
                                 <Setter Property="IsEnabled" Value="True"/>
                             </MultiDataTrigger>

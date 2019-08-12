@@ -44,7 +44,7 @@
             {
                 BucketControlViewModels.Add(new BucketControlViewModel(buckets[i])
                 {
-                    OverrunedRecordsVisibility = overrunedZoneVisibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed,
+                    Visibility = overrunedZoneVisibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed,
                     OverrunedRecords = buckets[i].OverrunedRecords
                 });
             }

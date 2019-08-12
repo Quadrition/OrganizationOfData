@@ -12,8 +12,6 @@
 
         public bool OverrunZone { get; set; }
 
-        public int Row { get; set; }
-
         public int Column { get; set; }
 
         public string Message { get; set; }
@@ -36,7 +34,7 @@
             KeyTransformation = -1;
 
             OverrunZone = false;
-            Row = -1;
+            KeyTransformation = -1;
             Column = -1;
         }
 
@@ -51,219 +49,164 @@
             }
             else
             {
-                if (Deleted)
+                if (DeletedInPrimary)
                 {
-                    if (DeletedInPrimary)
+                    Column++;
+
+                    if (!OverrunZone)
                     {
-                        if (!OverrunZone)
-                        {
-                            Column++;
-
-                            if (Column >= BulkFile.Factor)
-                            {
-                                Message += "Došli smo do kraja trenutnog baketa. ";
-
-                                if (BulkFile.PrimaryZone[KeyTransformation].OverrunedRecords == 0)
-                                {
-                                    BulkFile.PrimaryZone[Row].Records[BulkFile.Factor - 1].Person = new Person();
-                                    BulkFile.PrimaryZone[Row].Records[BulkFile.Factor - 1].Status = Status.empty;
-                                    Changed = true;
-
-                                    Message += "Nemamo slogove u zoni prekoračenja koji pripadaju trenutnom baketu. Brišemo poslednji slog i završavamo sa šiftovanjem. ";
-                                    Column = BulkFile.Factor - 1;
-                                    IsFinished = true;
-                                    Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
-                                }
-                                else
-                                {
-                                    Column = -1;
-                                    Row = 0;
-                                    Message += string.Format("Prelazimo na baket sa adresom: {0}. ", BulkFile.OverrunZone[Row].Address);
-                                    OverrunZone = true;
-                                }
-                            }
-                            else
-                            {
-                                BulkFile.PrimaryZone[Row].Records[Column - 1].Person = BulkFile.PrimaryZone[Row].Records[Column].Person;
-                                BulkFile.PrimaryZone[Row].Records[Column - 1].Status = BulkFile.PrimaryZone[Row].Records[Column].Status;
-
-                                Changed = true;
-                                Message += string.Format("Prebacujemo {0}. slog u {1}. slog u trenutnom baketu. ", Column + 1, Column);
-
-                                if (!OverrunZone ? BulkFile.PrimaryZone[Row].Records[Column].Status == Status.empty : BulkFile.OverrunZone[Row].Records[Column].Status == Status.empty)
-                                {
-                                    Message += string.Format("Došli smo do praznog sloga. Šiftovanje je završeno! Kliknite sledeći korak radi završetka simulacije. ");
-                                    IsFinished = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Column++;
-
-                            if (Column >= BulkFile.Factor)
-                            {
-                                Message = "Došli smo do kraja trenutnog baketa. ";
-                                Row++;
-
-                                if (Row >= BulkFile.NumberOfBuckets)
-                                {
-                                    throw new System.Exception();
-                                }
-                                else
-                                {
-                                    Message += string.Format("Prelazimo na baket sa adresom: {0}. ", BulkFile.OverrunZone[Row].Address);
-                                    Column = -1;
-                                }
-                            }
-                            else
-                            {
-                                Message += string.Format("Poveramo {0}. slog u trenutnom baketu. ", Column + 1);
-                                if (KeyTransformations.ResidualSplitting(BulkFile.OverrunZone[Row].Records[Column].Person.Id, BulkFile.NumberOfBuckets) == KeyTransformation)
-                                {
-                                    Message += string.Format("Našli smo prvi slog koji pripada traženom baketu. Prebacujemo ga u primarnu zonu i šiftujemo ostale slogove u zoni prekoračenja za 1 mesto ulevo. ");
-
-                                    BulkFile.PrimaryZone[KeyTransformation].OverrunedRecords--;
-                                    DeletedInOverrun = true;
-                                    DeletedInPrimary = false;
-
-                                    BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Person = BulkFile.OverrunZone[Row].Records[Column].Person;
-                                    BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Status = BulkFile.OverrunZone[Row].Records[Column].Status;
-                                    Changed = true;
-                                }
-                                else
-                                {
-                                    Message += string.Format("Id trenutnog sloga ne pripada traženom baketu. ");
-                                }
-
-                                if (BulkFile.OverrunZone[Row].Records[Column].Status == Status.empty)
-                                {
-                                    throw new System.Exception();
-                                }
-                            }
-                        }
-                    }
-                    else if (DeletedInOverrun)
-                    {
-                        Column++;
-
                         if (Column >= BulkFile.Factor)
                         {
-                            Message = "Došli smo do kraja trenutnog baketa. ";
-                            Row++;
+                            Message += "Došli smo do kraja trenutnog baketa. ";
 
-                            if (Row >= BulkFile.NumberOfBuckets)
+                            if (BulkFile.PrimaryZone[KeyTransformation].OverrunedRecords == 0)
                             {
-                                Message = "Došli smo do kraja zone prekoračenja. Završili smo sa šiftovanjem ulevo. ";
-                                Row = -1;
+                                BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Person = new Person();
+                                BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Status = Status.empty;
+                                Changed = true;
 
+                                Message += "Nemamo slogove u zoni prekoračenja koji pripadaju trenutnom baketu. Brišemo poslednji slog i završavamo sa šiftovanjem. ";
+                                Column = BulkFile.Factor - 1;
                                 IsFinished = true;
                                 Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
                             }
                             else
                             {
-                                Message += string.Format("Prelazimo na baket sa adresom: {0}. ", BulkFile.OverrunZone[Row].Address);
                                 Column = -1;
+                                Message += string.Format("Prelazimo u zonu prekoračenja jer u njoj postoje slogovi koji pripadaju trenutnom baketu. ");
+                                OverrunZone = true;
                             }
                         }
                         else
                         {
-                            if (Column == 0)
-                            {
-                                BulkFile.OverrunZone[Row - 1].Records[BulkFile.Factor - 1].Person = BulkFile.OverrunZone[Row].Records[Column].Person;
-                                BulkFile.OverrunZone[Row - 1].Records[BulkFile.Factor - 1].Status = BulkFile.OverrunZone[Row].Records[Column].Status;
+                            BulkFile.PrimaryZone[KeyTransformation].Records[Column - 1].Person = BulkFile.PrimaryZone[KeyTransformation].Records[Column].Person;
+                            BulkFile.PrimaryZone[KeyTransformation].Records[Column - 1].Status = BulkFile.PrimaryZone[KeyTransformation].Records[Column].Status;
 
-                                Message += string.Format("Prebacujemo prvi slog iz baketa sa adresom {0} u poslednji slog baketa sa adresom {1}. ", BulkFile.OverrunZone[Row - 1].Address, BulkFile.OverrunZone[Row].Address);
-                                Changed = true;
-                            }
-                            else
-                            {
-                                BulkFile.OverrunZone[Row].Records[Column - 1].Person = BulkFile.OverrunZone[Row].Records[Column].Person;
-                                BulkFile.OverrunZone[Row].Records[Column - 1].Status = BulkFile.OverrunZone[Row].Records[Column].Status;
+                            Changed = true;
+                            Message += string.Format("Prebacujemo {0}. slog u {1}. slog u trenutnom baketu. ", Column + 1, Column);
 
-                                Changed = true;
-                                Message += string.Format("Prebacujemo {0}. slog u {1}. slog u trenutnom baketu. ", Column + 1, Column);
-                            }
-
-                            if (!OverrunZone ? BulkFile.PrimaryZone[Row].Records[Column].Status == Status.empty : BulkFile.OverrunZone[Row].Records[Column].Status == Status.empty)
+                            if (BulkFile.PrimaryZone[KeyTransformation].Records[Column].Status == Status.empty)
                             {
                                 Message += string.Format("Došli smo do praznog sloga. Šiftovanje je završeno! Kliknite sledeći korak radi završetka simulacije. ");
                                 IsFinished = true;
                             }
                         }
                     }
-                }
-                else
-                {
-                    if (Row == -1)
+                    else
                     {
-                        if (!OverrunZone)
+                        if (Column >= BulkFile.NumberOfRecordsInOverrunZone)
                         {
-                            string methodName = null;
-
-                            switch (BulkFile.TransformationMethod)
-                            {
-                                case TransformationMethod.centralKeyDigits:
-                                    KeyTransformation = KeyTransformations.CentralKeyDigits(Id, BulkFile.NumberOfBuckets);
-                                    methodName = "centralnih kvadrata ključeva";
-                                    break;
-                                case TransformationMethod.overlap:
-                                    KeyTransformation = KeyTransformations.Overlap(Id, BulkFile.NumberOfBuckets);
-                                    methodName = "metodom preklapanja";
-                                    break;
-                                case TransformationMethod.residualSplitting:
-                                    KeyTransformation = KeyTransformations.ResidualSplitting(Id, BulkFile.NumberOfBuckets);
-                                    methodName = "ostataka pri deljenju";
-                                    break;
-                            }
-                            Row = KeyTransformation;
-
-                            Message = string.Format("Radimo transformaciju ključa metodom {0}. Dobijamo adresu baketa: {1}. Učitavamo taj baket. ", methodName, Row);
+                            throw new System.Exception();
                         }
                         else
                         {
-                            Row = 0;
-                            Message = string.Format("Učitavamo baket sa adresom {0}. ", BulkFile.OverrunZone[Row].Address);
+                            Message += string.Format("Poveramo {0}. slog u zoni prekoračenja. ", Column + 1);
+                            if (KeyTransformations.ResidualSplitting(BulkFile.OverrunZone[Column].Person.Id, BulkFile.NumberOfBuckets) == KeyTransformation)
+                            {
+                                Message += string.Format("Našli smo prvi slog koji pripada traženom baketu. Prebacujemo ga u primarnu zonu i šiftujemo ostale slogove u zoni prekoračenja za 1 mesto ulevo. ");
+
+                                BulkFile.PrimaryZone[KeyTransformation].OverrunedRecords--;
+                                DeletedInOverrun = true;
+                                DeletedInPrimary = false;
+
+                                BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Person = BulkFile.OverrunZone[Column].Person;
+                                BulkFile.PrimaryZone[KeyTransformation].Records[BulkFile.Factor - 1].Status = BulkFile.OverrunZone[Column].Status;
+                                Changed = true;
+                            }
+                            else
+                            {
+                                Message += string.Format("Id trenutnog sloga ne pripada traženom baketu prilikom transformacije ključa. ");
+                            }
+
+                            if (BulkFile.OverrunZone[Column].Status == Status.empty)
+                            {
+                                throw new System.Exception();
+                            }
                         }
+                    }
+                }
+                else if (DeletedInOverrun)
+                {
+                    Column++;
+
+                    if (Column >= BulkFile.NumberOfRecordsInOverrunZone || BulkFile.OverrunZone[Column].Status == Status.empty)
+                    {
+                        Message = "Došli smo do kraja zone prekoračenja. Brišemo poslednji slog iz zone prekoračenja. Završili smo sa šiftovanjem ulevo. ";
+
+                        if (BulkFile.OverrunZone[Column - 1].Status != Status.empty)
+                        {
+                            BulkFile.OverrunZone[Column - 1].Person = new Person();
+                            BulkFile.OverrunZone[Column - 1].Status = Status.empty;
+                        }
+
+                        Changed = true;
+                        IsFinished = true;
+                        Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
+                    }
+                    else
+                    {
+                        BulkFile.OverrunZone[Column - 1].Person = BulkFile.OverrunZone[Column].Person;
+                        BulkFile.OverrunZone[Column - 1].Status = BulkFile.OverrunZone[Column].Status;
+
+                        Changed = true;
+                        Message += string.Format("Prebacujemo {0}. slog u {1}. slog u zoni prekoračenja. ", Column + 1, Column);
+                    }
+                }
+                else
+                {
+                    if (KeyTransformation == -1 && !OverrunZone)
+                    {
+                        string methodName = null;
+
+                        switch (BulkFile.TransformationMethod)
+                        {
+                            case TransformationMethod.centralKeyDigits:
+                                KeyTransformation = KeyTransformations.CentralKeyDigits(Id, BulkFile.NumberOfBuckets);
+                                methodName = "centralnih kvadrata ključeva";
+                                break;
+                            case TransformationMethod.overlap:
+                                KeyTransformation = KeyTransformations.Overlap(Id, BulkFile.NumberOfBuckets);
+                                methodName = "metodom preklapanja";
+                                break;
+                            case TransformationMethod.residualSplitting:
+                                KeyTransformation = KeyTransformations.ResidualSplitting(Id, BulkFile.NumberOfBuckets);
+                                methodName = "ostataka pri deljenju";
+                                break;
+                        }
+
+                        Message = string.Format("Radimo transformaciju ključa metodom {0}. Dobijamo adresu baketa: {1}. Učitavamo taj baket. ", methodName, KeyTransformation);
                     }
                     else
                     {
                         Column++;
 
-                        if (Column >= BulkFile.Factor)
+                        if (Column >= BulkFile.Factor && !OverrunZone)
                         {
-                            if (!OverrunZone)
-                            {
-                                OverrunZone = true;
-                                Row = -1;
-                                Column = -1;
+                            OverrunZone = true;
+                            Column = -1;
 
-                                Message += string.Format("Slog nije pronađen u primarnoj zoni. Prelazimo u zonu prekoračenja.");
-                            }
-                            else
-                            {
-                                Message = "Došli smo do kraja trenutnog baketa. ";
-                                Row++;
+                            Message += string.Format("Ne postoji slog u primarnoj zoni. Prelazimo u zonu prekoračenja! ");
+                        }
+                        else if (Column >= BulkFile.NumberOfRecordsInOverrunZone && OverrunZone)
+                        {
+                            Message += "Došli smo do kraja zone prekoračenja. Ne postoji slog sa unetim id-jem u datoteci! ";
+                            Column = -1;
 
-                                if (Row >= BulkFile.NumberOfBuckets)
-                                {
-                                    Message += "Došli smo do kraja zone prekoračenja. Ne postoji slog sa unetim id-jem u datoteci. ";
-                                    Row = -1;
-
-                                    IsFinished = true;
-                                    Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
-                                }
-                                else
-                                {
-                                    Message += string.Format("Prelazimo na baket sa adresom: {0}. ", BulkFile.OverrunZone[Row].Address);
-                                    Column = -1;
-                                }
-                            }
+                            IsFinished = true;
+                            Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
                         }
                         else
                         {
-                            Record record = !OverrunZone ? BulkFile.PrimaryZone[Row].Records[Column] : BulkFile.OverrunZone[Row].Records[Column];
-                            Message = string.Format("Proveravamo {0}. slog u baketu.", Column + 1);
+                            Record record = !OverrunZone ? BulkFile.PrimaryZone[KeyTransformation].Records[Column] : BulkFile.OverrunZone[Column];
+                            if (!OverrunZone)
+                                Message += string.Format("Proveravamo {0}. slog u primarnoj zoni. ", Column + 1);
+                            else
+                            {
+                                if (record.Status == Status.empty)
+                                    Message += string.Format("Došli smo do slobodnog mesta u zoni prekoračenja. ", Column + 1);
+                                else
+                                    Message += string.Format("Proveravamo {0}. slog u zoni prekoračenja. ", Column + 1);
+                            }
 
                             if (record.Status != Status.empty && Id == record.Person.Id)
                             {
@@ -279,11 +222,11 @@
                                     {
                                         if (!OverrunZone)
                                         {
-                                            BulkFile.PrimaryZone[Row].Records[Column].Status = Status.inactive;
+                                            BulkFile.PrimaryZone[KeyTransformation].Records[Column].Status = Status.inactive;
                                         }
                                         else
                                         {
-                                            BulkFile.OverrunZone[Row].Records[Column].Status = Status.inactive;
+                                            BulkFile.OverrunZone[Column].Status = Status.inactive;
                                         }
                                         Changed = true;
 
@@ -296,16 +239,16 @@
                                 {
                                     if (!OverrunZone)
                                     {
-                                        BulkFile.PrimaryZone[Row].Records[Column].Person = new Person();
-                                        BulkFile.PrimaryZone[Row].Records[Column].Status = Status.empty;
+                                        BulkFile.PrimaryZone[KeyTransformation].Records[Column].Person = new Person();
+                                        BulkFile.PrimaryZone[KeyTransformation].Records[Column].Status = Status.empty;
                                         DeletedInPrimary = true;
 
                                         Message += string.Format("Fizički brišemo trenutni slog! Sada šiftujemo sve slogove iza trenutnog sloga za jedno mesto ulevo u trenutnom baketu. ");
                                     }
                                     else
                                     {
-                                        BulkFile.OverrunZone[Row].Records[Column].Person = new Person();
-                                        BulkFile.OverrunZone[Row].Records[Column].Status = Status.empty;
+                                        BulkFile.OverrunZone[Column].Person = new Person();
+                                        BulkFile.OverrunZone[Column].Status = Status.empty;
                                         BulkFile.PrimaryZone[KeyTransformation].OverrunedRecords--;
                                         DeletedInOverrun = true;
 
@@ -316,7 +259,7 @@
                             }
                             else if (record.Status == Status.empty)
                             {
-                                Message += string.Format("Trenutni slog je prazan. Ne postoji slog sa unetim id-jem u datoteci.  ");
+                                Message += string.Format("Ne postoji slog sa unetim id-jem u datoteci.  ");
                                 Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");
 
                                 IsFinished = true;

@@ -16,7 +16,7 @@
              TextOptions.TextRenderingMode="Auto"
              Background="Transparent"
              FontFamily="{DynamicResource MaterialDesignFont}"
-             Height="Auto" Width="Auto">
+             Height="Auto" Width="Auto" Visibility="{Binding Visibility}">
     <UserControl.Resources>
         <ResourceDictionary>
             <windows:StatusConverter x:Key="statusConverter" />

@@ -3,6 +3,7 @@
     using OrganizationOfData.Data;
     using OrganizationOfData.Windows;
     using System;
+    using System.Windows;
     using System.Windows.Media;
 
     /// <summary>
@@ -20,7 +21,7 @@
             get
             {
                 return record;
-            } 
+            }
             set
             {
                 record = value;
@@ -66,13 +67,31 @@
             }
         }
 
+        private Visibility visibility;
+
+        /// <summary>
+        /// Gets or sets a visibility of record control
+        /// </summary>
+        public Visibility Visibility
+        {
+            get
+            {
+                return visibility;
+            }
+            set
+            {
+                visibility = value;
+                NotifyPropertyChanged(nameof(Visibility));
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of <see cref="RecordControlViewModel"/> class
         /// </summary>
         public RecordControlViewModel()
         {
-            ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Light;
-            LabelColor = new SolidColorBrush(Colors.Black);
+            ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.Dark;
+            LabelColor = new SolidColorBrush(Colors.White);
         }
 
         /// <summary>
@@ -92,16 +111,16 @@
             switch (record.Status)
             {
                 case Status.active:
-                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
-                    LabelColor = new SolidColorBrush(Colors.White);
+                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
+                    LabelColor = new SolidColorBrush(Colors.Black);
                     break;
                 case Status.inactive:
                     ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryMid;
                     LabelColor = new SolidColorBrush(Colors.White);
                     break;
                 case Status.empty:
-                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryLight;
-                    LabelColor = new SolidColorBrush(Colors.Black);
+                    ColorZoneMode = MaterialDesignThemes.Wpf.ColorZoneMode.PrimaryDark;
+                    LabelColor = new SolidColorBrush(Colors.White);
                     break;
             }
         }
