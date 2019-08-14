@@ -833,14 +833,10 @@
                         }
                         else
                         {
-                            if (oldDeleted != DeleteRecordSimulation.Deleted)
-                            {
-                                PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
-                            }
-                            else
-                            {
+                            if (DeleteRecordSimulation.Column != 0)
                                 PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
-                            }
+
+                            PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(DeleteRecordSimulation.Column).ResetColor();
                         }
                     }
                     else

@@ -137,7 +137,6 @@
                         else
                         {
                             Message += string.Format("Ne postoji slog sa unetim id-jem u datoteci. ");
-                            Column = -1;
 
                             IsFinished = true;
                             Message += string.Format("Kliknite sledeći korak radi završetka simulacije. ");

@@ -15,7 +15,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="Transparent"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Autori" Height="300" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+        Title="Autori" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Width="300" Height="200" WindowStyle="None" AllowsTransparency="True">
     <Window.Triggers>
         <EventTrigger RoutedEvent="Loaded">
             <BeginStoryboard>
