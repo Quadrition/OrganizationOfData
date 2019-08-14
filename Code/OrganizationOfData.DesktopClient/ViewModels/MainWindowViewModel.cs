@@ -841,36 +841,43 @@
                     }
                     else
                     {
-                        if (MemoryBucketControlViewModel != null)
+                        if (DeleteRecordSimulation.Logical)
                         {
-                            PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(BulkFile.Factor - 1).ResetColor();
+                            OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).ResetColor();
                         }
                         else
                         {
-                            if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone && DeleteRecordSimulation.Deleted)
+                            if (MemoryBucketControlViewModel != null)
                             {
-                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
-                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Hidden;
-
-                                if (OverrunZoneRecordControls.Count == 0)
-                                {
-                                    OverrunZoneVisibility = Visibility.Hidden;
-                                }
+                                PrimaryZoneControlViewModel.BucketControlViewModels.ElementAt(DeleteRecordSimulation.KeyTransformation).RecordControlViewModels.ElementAt(BulkFile.Factor - 1).ResetColor();
                             }
                             else
                             {
-                                if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone)
+                                if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone && DeleteRecordSimulation.Deleted)
                                 {
-                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).ResetColor();
+                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Hidden;
+
+                                    if (OverrunZoneRecordControls.Count == 0)
+                                    {
+                                        OverrunZoneVisibility = Visibility.Hidden;
+                                    }
                                 }
-
-                                OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
-                                MemoryBucketVisibility = Visibility.Collapsed;
-
-                                if (OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Record.Status == Status.empty)
+                                else
                                 {
-                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Collapsed;
-                                    MemoryVisibility = Visibility.Collapsed;
+                                    if (DeleteRecordSimulation.Column == BulkFile.NumberOfRecordsInOverrunZone)
+                                    {
+                                        OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column).ResetColor();
+                                    }
+
+                                    OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).ResetColor();
+                                    MemoryBucketVisibility = Visibility.Collapsed;
+
+                                    if (OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Record.Status == Status.empty)
+                                    {
+                                        OverrunZoneRecordControls.ElementAt(DeleteRecordSimulation.Column - 1).Visibility = Visibility.Collapsed;
+                                        MemoryVisibility = Visibility.Collapsed;
+                                    }
                                 }
                             }
                         }
