@@ -5,7 +5,7 @@
     using OrganizationOfData.Windows;
 
     /// <summary>
-    /// ViewModel containing basic functionalities like closing the dialog for OverrunZoneControl View
+    /// ViewModel containing basic functionalities for the <see cref="Views.AuthorsDialog"/>
     /// </summary>
     public class AuthorsDialogViewModel : ViewModel, IDialogRequestClose
     {

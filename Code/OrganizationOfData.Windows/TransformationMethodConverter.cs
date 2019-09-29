@@ -4,6 +4,9 @@
     using System;
     using System.Globalization;
 
+    /// <summary>
+    /// Represents a transformation methods in bulk file
+    /// </summary>
     public enum TransformationMethod
     {
         residualSplitting = 0,

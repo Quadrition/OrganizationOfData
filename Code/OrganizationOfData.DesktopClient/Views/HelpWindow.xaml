@@ -18,13 +18,13 @@
         Title="Simulacija rasute datoteke" Height="600" Width="1200" MinHeight="100" MinWidth="800" Icon="pack://application:,,,/Resources/favicon.ico"
         Closing="Window_Closing">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Margin="30 30 30 0" Orientation="Horizontal" VerticalAlignment="Center">
+        <StackPanel DockPanel.Dock="Top" Margin="30 30 30 10" Orientation="Horizontal" VerticalAlignment="Center">
             <materialDesign:PackIcon Kind="FileDocumentBoxMultiple" Width="50" Height="50" Margin="0 0 20 0" />
             <TextBlock VerticalAlignment="Center" Style="{StaticResource MaterialDesignDisplay1TextBlock}">
                 Dokumentacija
             </TextBlock>
         </StackPanel>
-        <DockPanel Margin="30">
+        <DockPanel Margin="10">
             <TreeView DockPanel.Dock="Left" Margin="0 0 20 0">
                 <TreeViewItem Header="Glavni prozor" Selected="TreeViewItem_Selected" />
                 <TreeViewItem Header="Rad sa datotekama">

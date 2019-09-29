@@ -1,5 +1,8 @@
 ﻿namespace OrganizationOfData.Windows
 {
+    /// <summary>
+    /// A static class containing function for deep copying an object
+    /// </summary>
     public static class Copy
     {
         public static T DeepCopy<T>(T obj)

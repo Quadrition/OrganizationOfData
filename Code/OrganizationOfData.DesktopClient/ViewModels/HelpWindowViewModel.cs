@@ -1,7 +1,6 @@
 ﻿namespace OrganizationOfData.DesktopClient.ViewModels
 {
     using System;
-    using System.Windows.Input;
     using OrganizationOfData.Windows;
 
     /// <summary>

@@ -4,6 +4,9 @@
     using System.Globalization;
     using System.Windows.Data;
 
+    /// <summary>
+    /// Represents a status for the Record
+    /// </summary>
     public enum Status
     {
         active = 0,
